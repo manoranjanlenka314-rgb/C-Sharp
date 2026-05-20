@@ -1,0 +1,119 @@
+1. Explain the .NET Framework architecture in real-world terms.
+Answer:  
+The .NET Framework is like a city where developers build applications. At the core, you have the CLR (Common Language Runtime) — the city’s infrastructure that manages memory, garbage collection, and security. Then comes the BCL (Base Class Library) — the utilities like water, electricity, and transport, offering ready-made classes for collections, IO, threading, etc. On top of this, developers build apps using languages like C#, VB.NET, or F#. In real-world projects, this layered architecture ensures consistency: for example, whether you’re building a banking app or an e-commerce site, the CLR guarantees memory safety and the BCL provides reusable components.
+
+2. How do you handle authentication in ASP.NET MVC applications?
+Answer:  
+Authentication is verifying “who you are.” In real-world apps, we often use ASP.NET Identity or OAuth/OpenID Connect. For example, in a corporate HR portal, employees log in with their company credentials. ASP.NET Identity manages user tables, password hashing, and roles. If integrating with Google or Azure AD, OAuth/OpenID Connect provides token-based authentication. A practical implementation involves middleware in Startup.cs that validates tokens and ensures only authenticated users can access sensitive controllers like PayrollController.
+
+3. What is the difference between value types and reference types in C#?
+Answer:  
+Value types (like int, struct) store data directly, while reference types (like class, object) store a pointer to the data. Imagine a warehouse: value types are items stored directly in a box, while reference types are like a slip of paper pointing to where the item is stored. In real-world apps, this matters for performance. For example, in a financial app, using struct for small immutable data (like CurrencyRate) avoids heap allocations, while complex objects like Customer must be classes since they carry multiple properties and behaviors.
+
+4. How do you implement dependency injection in .NET Core?
+Answer:  
+Dependency Injection (DI) is like hiring specialists instead of doing everything yourself. In .NET Core, DI is built-in. For example, in an e-commerce app, the OrderService depends on IPaymentGateway. Instead of hardcoding new PayPalGateway(), you register services in Program.cs:
+
+csharp
+builder.Services.AddScoped<IPaymentGateway, PayPalGateway>();
+Now, when OrderService is created, the framework injects the correct gateway. This makes testing easier — you can inject a MockPaymentGateway during unit tests.
+
+5. Explain Entity Framework Core and its advantages.
+Answer:  
+Entity Framework Core (EF Core) is an ORM that maps database tables to C# classes. Instead of writing raw SQL, you work with LINQ queries. In a hospital management system, you might have a Patient class mapped to a Patients table. EF Core handles CRUD operations, migrations, and relationships. Advantages include productivity (less SQL boilerplate), maintainability (strongly typed queries), and portability (works across SQL Server, PostgreSQL, MySQL). However, for performance-critical scenarios, raw SQL or stored procedures may still be needed.
+
+6. What is the difference between IEnumerable, IQueryable, and List?
+Answer:
+
+IEnumerable: Executes queries in memory.
+
+IQueryable: Executes queries at the database level.
+
+List: A concrete collection in memory.
+
+In a real-world HR app, if you call .ToList() on Employees, all records load into memory. But if you use IQueryable with EF Core, the query translates to SQL and only fetches required rows. This distinction prevents performance bottlenecks when dealing with millions of records.
+
+7. How do you secure sensitive data in .NET applications?
+Answer:  
+Security involves encryption, hashing, and secure storage. For example, in a banking app, passwords are hashed using PBKDF2 or bcrypt with salt. Connection strings are stored in Azure Key Vault or User Secrets instead of plain appsettings.json. Sensitive API calls use HTTPS and JWT tokens. In real-world audits, failing to secure data can lead to compliance violations (GDPR, HIPAA).
+
+8. What is middleware in ASP.NET Core?
+Answer:  
+Middleware is like checkpoints in a toll road. Each request passes through a pipeline of middleware components. For example, in a shopping app:
+
+Logging middleware records request details.
+
+Authentication middleware checks user identity.
+
+Routing middleware directs to the correct controller.
+You configure middleware in Program.cs using app.Use.... This modular design makes it easy to add or remove features without rewriting the app.
+
+9. How do you implement caching in .NET applications?
+Answer:  
+Caching improves performance by storing frequently accessed data. In a news portal, instead of hitting the database for trending articles every second, you cache results in MemoryCache or Distributed Cache (Redis). ASP.NET Core provides IMemoryCache for local caching and IDistributedCache for shared caching across servers. This reduces load and speeds up response times.
+
+10. Explain async/await in C# with a real-world example.
+Answer:  
+Async/await allows non-blocking operations. In a travel booking app, fetching flight data from multiple APIs can be slow. Using await HttpClient.GetAsync(), the thread is freed while waiting for the response. This improves scalability — the server can handle other requests instead of being blocked. Async/await is critical in microservices where multiple APIs interact.
+
+11. How do you handle exceptions in .NET applications?
+Answer:  
+Exception handling involves try-catch blocks, logging, and global error handling. In a payroll app, if a database connection fails, you catch the exception, log it using Serilog, and show a user-friendly message. ASP.NET Core provides UseExceptionHandler middleware for global error handling. This ensures users don’t see raw stack traces, which could expose sensitive info.
+
+12. What is the difference between REST API and gRPC in .NET?
+Answer:
+
+REST API: Text-based (JSON), widely used, slower for high-performance apps.
+
+gRPC: Binary-based (Protocol Buffers), faster, supports streaming.
+
+In a fintech app, REST is used for public APIs (easy for clients to consume), while gRPC is used internally between microservices for speed and efficiency.
+
+13. How do you implement logging in .NET Core?
+Answer:  
+Logging is critical for debugging and monitoring. In a healthcare app, you configure ILogger with providers like Serilog or NLog. Logs can be written to files, databases, or cloud services (Azure Application Insights). Structured logging with JSON format helps in analyzing logs with tools like ELK stack.
+
+14. What is the difference between .NET Framework and .NET Core?
+Answer:
+
+.NET Framework: Windows-only, mature, legacy support.
+
+.NET Core/.NET 5+: Cross-platform, high performance, modern.
+
+In real-world migration projects, companies move from .NET Framework to .NET Core to run apps on Linux servers and leverage containerization with Docker.
+
+15. How do you implement role-based authorization in ASP.NET Core?
+Answer:  
+Role-based authorization restricts access based on roles. In a school management app, teachers can access grade reports, while students cannot. You decorate controllers with [Authorize(Roles="Teacher")]. Roles are stored in the database and managed via ASP.NET Identity. This ensures fine-grained access control.
+
+16. Explain SOLID principles with examples.
+Answer:
+
+Single Responsibility: Each class should do one thing. Example: InvoiceService handles invoices, not payments.
+
+Open/Closed: Classes should be open for extension, closed for modification. Example: Payment gateways implemented via interfaces.
+
+Liskov Substitution: Subclasses should replace base classes without issues.
+
+Interface Segregation: Small, specific interfaces.
+
+Dependency Inversion: Depend on abstractions, not concrete classes.
+
+In real-world apps, SOLID ensures maintainability and scalability.
+
+17. How do you handle database migrations in EF Core?
+Answer:  
+Migrations track schema changes. In a retail app, when adding a Discount column to Products, you run Add-Migration AddDiscount and Update-Database. EF Core generates migration scripts, ensuring the database evolves with the codebase. This avoids manual SQL changes.
+
+18. What is the difference between Task and Thread in C#?
+Answer:
+
+Thread: Low-level, represents OS threads.
+
+Task: Higher-level abstraction, managed by Task Parallel Library.
+
+In a stock trading app, you use Task.Run() for background operations like fetching live prices. Tasks are more efficient since they use thread pooling.
+
+19. How do you implement unit testing in .NET?
+Answer:  
+Unit testing ensures code correctness. Using **xUnit/N
