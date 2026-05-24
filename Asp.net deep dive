@@ -1,0 +1,202 @@
+1. Introduction
+ASP.NET MVC (Model-View-Controller) is a framework developed by Microsoft for building scalable, testable, and maintainable web applications. It separates application logic into three interconnected components:
+
+Model: Represents data and business logic.
+
+View: Handles UI rendering.
+
+Controller: Manages user input and orchestrates between Model and View.
+
+2. Key Features
+Separation of Concerns: Clear division between UI, business logic, and data.
+
+Testability: Controllers and models can be unit tested independently.
+
+Routing: URL patterns map directly to controller actions.
+
+Convention over Configuration: Reduces boilerplate setup.
+
+Extensibility: Supports dependency injection, filters, and custom components.
+
+3. Lifecycle
+Request enters Routing Module → matched to a controller/action.
+
+Controller executes action → interacts with Model.
+
+Model provides data → passed to View.
+
+View renders HTML → response sent to client.
+
+4. Core Concepts
+Routing: Defined in RouteConfig.cs using MapRoute.
+
+Controllers: Classes ending with Controller, containing action methods.
+
+Views: Razor syntax (.cshtml) for dynamic HTML generation.
+
+Filters: Attributes like [Authorize], [HandleError], [OutputCache].
+
+State Management: Session, TempData, ViewData, ViewBag.
+
+Security: Anti-forgery tokens, authentication filters.
+
+5. Advantages
+Cleaner architecture.
+
+Easier testing and maintenance.
+
+Fine-grained control over HTML and HTTP.
+
+Supports RESTful services.
+
+6. Limitations
+Steeper learning curve compared to WebForms.
+
+Requires more manual coding for UI elements.
+
+Less drag-and-drop support.
+
+🎯 20 ASP.NET MVC Interview Questions & Answers
+Q1. What is ASP.NET MVC and why was it introduced?
+Answer: ASP.NET MVC is a framework for building web applications using the Model-View-Controller pattern. It was introduced to overcome limitations of WebForms, such as tight coupling, difficulty in unit testing, and lack of fine-grained control over HTML. MVC provides separation of concerns, better testability, and full control over markup.
+
+Q2. Explain the MVC architecture.
+Answer:
+
+Model: Represents business logic and data.
+
+View: Displays data to the user.
+
+Controller: Handles requests, processes input, and returns responses.
+This separation ensures modularity and testability.
+
+Q3. How does routing work in ASP.NET MVC?
+Answer: Routing maps incoming URLs to controller actions. Defined in RouteConfig.cs using routes.MapRoute(). Example:
+
+csharp
+routes.MapRoute(
+    name: "Default",
+    url: "{controller}/{action}/{id}",
+    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+);
+This means /Home/Index/5 maps to HomeController.Index(int id).
+
+Q4. Difference between ViewData, ViewBag, and TempData?
+Answer:
+
+ViewData: Dictionary, requires typecasting, valid only for current request.
+
+ViewBag: Dynamic wrapper around ViewData, no typecasting needed.
+
+TempData: Persists across redirects, useful for passing data between actions.
+
+Q5. What are Action Filters?
+Answer: Action Filters are attributes applied to controllers/actions to inject behavior. Examples:
+
+[Authorize] → restricts access.
+
+[HandleError] → handles exceptions.
+
+[OutputCache] → caches responses.
+
+Q6. Explain Razor View Engine.
+Answer: Razor is a lightweight view engine that uses @ syntax to embed C# code in HTML. Example:
+
+html
+<h2>@Model.Name</h2>
+It is faster, cleaner, and more expressive compared to ASPX view engine.
+
+Q7. How is dependency injection supported in MVC?
+Answer: MVC supports DI via constructor injection in controllers. Example:
+
+csharp
+public class HomeController : Controller
+{
+    private readonly ICustomerService _service;
+    public HomeController(ICustomerService service)
+    {
+        _service = service;
+    }
+}
+This improves testability and decoupling.
+
+Q8. What is the difference between Partial View and Layout?
+Answer:
+
+Partial View: Reusable view snippet (like a widget).
+
+Layout: Master page defining common structure (header, footer, navigation).
+
+Q9. How do you implement authentication in MVC?
+Answer: Using ASP.NET Identity or custom authentication. [Authorize] attribute restricts access. Anti-forgery tokens prevent CSRF attacks.
+
+Q10. What is Bundling and Minification?
+Answer: Bundling combines multiple CSS/JS files into one. Minification removes whitespace/comments. Improves performance by reducing requests and payload size.
+
+Q11. Explain the difference between ActionResult and JsonResult.
+Answer:
+
+ActionResult: Base class for all action results (ViewResult, RedirectResult, etc.).
+
+JsonResult: Returns JSON data, useful for AJAX calls.
+
+Q12. How do you handle exceptions in MVC?
+Answer:
+
+Global filters ([HandleError]).
+
+Custom error pages in web.config.
+
+Exception handling middleware.
+
+Logging via NLog/Serilog.
+
+Q13. What is Scaffolding in MVC?
+Answer: Scaffolding auto-generates CRUD views and controllers based on a model. Saves development time.
+
+Q14. Explain TempData lifecycle.
+Answer: TempData persists until it is read. Once accessed, it is cleared unless Keep() or Peek() is used.
+
+Q15. How do you implement AJAX in MVC?
+Answer: Using @Ajax.ActionLink or jQuery AJAX calls. Example:
+
+javascript
+$.ajax({
+    url: '/Home/GetData',
+    type: 'GET',
+    success: function(data) { console.log(data); }
+});
+Q16. Difference between ASP.NET MVC and WebForms?
+Answer:
+
+MVC: Separation of concerns, testable, full control over HTML.
+
+WebForms: Event-driven, tightly coupled, less testable, uses ViewState.
+
+Q17. What is the role of Global.asax in MVC?
+Answer: Defines application-level events like Application_Start, Application_Error. Used for initializing routes, filters, and global settings.
+
+Q18. How do you secure an MVC application?
+Answer:
+
+Use HTTPS.
+
+Anti-forgery tokens.
+
+Input validation.
+
+Authentication & Authorization.
+
+Avoid exposing sensitive data.
+
+Q19. Explain Areas in MVC.
+Answer: Areas partition a large application into smaller modules (e.g., Admin, Customer). Each area has its own controllers, views, and routes.
+
+Q20. How do you test controllers in MVC?
+Answer: Controllers can be unit tested by mocking dependencies. Example using Moq:
+
+csharp
+var mockService = new Mock<ICustomerService>();
+var controller = new HomeController(mockService.Object);
+var result = controller.Index() as ViewResult;
+Assert.AreEqual("Index", result.ViewName);
