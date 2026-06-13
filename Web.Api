@@ -1,0 +1,90 @@
+Definition: ASP.NET Web API is a framework for building HTTP services that can be consumed by browsers, mobile devices, and other clients.
+
+Protocol: Uses HTTP as the communication protocol (GET, POST, PUT, DELETE).
+
+Data Format: Supports JSON, XML, and other formats via content negotiation.
+
+RESTful: Designed around REST principles — resources are exposed via URIs.
+
+Hosting: Can be hosted in IIS, self-hosted, or inside ASP.NET applications.
+
+Routing: Uses attribute routing ([Route]) or convention-based routing (WebApiConfig).
+
+Model Binding: Automatically maps HTTP request data to method parameters.
+
+Security: Supports authentication (JWT, OAuth, cookies) and authorization.
+
+Versioning: APIs can be versioned using query strings, headers, or routes.
+
+Use Cases: Mobile backends, single-page apps, IoT, microservices.
+
+🎯 20 Interview Q&A on Web API in .NET
+Basics
+Q: What is ASP.NET Web API?  
+A: It’s a framework for building RESTful services over HTTP. Unlike WCF, it is lightweight, easy to use, and supports multiple formats like JSON and XML.
+
+Q: Difference between Web API and WCF?  
+A: WCF is service-oriented and supports multiple protocols (TCP, MSMQ, HTTP), while Web API is purely HTTP-based and optimized for RESTful services.
+
+Q: Why use Web API instead of MVC controllers?  
+A: MVC controllers return views, while Web API controllers (ApiController) return raw data (JSON/XML) for client consumption.
+
+Routing & Requests
+Q: How does routing work in Web API?  
+A: It uses WebApiConfig or attribute routing. Example:
+
+csharp
+[Route("api/products/{id}")]
+public IHttpActionResult GetProduct(int id) { ... }
+Q: What is attribute routing?  
+A: Routing defined directly on controller methods using [Route] or [HttpGet], giving more flexibility than convention-based routing.
+
+Q: How do you handle query strings in Web API?  
+A: Parameters are automatically bound. Example: /api/products?category=electronics maps to GetProducts(string category).
+
+Data & Responses
+Q: What is content negotiation?  
+A: The process where Web API selects the response format (JSON/XML) based on client request headers (Accept).
+
+Q: How do you return JSON only?  
+A: Configure GlobalConfiguration.Formatters to remove XML formatter and keep JSON.
+
+Q: How do you handle large data sets in Web API?  
+A: Use pagination, filtering, or streaming responses to avoid performance bottlenecks.
+
+Security
+Q: How do you secure a Web API?  
+A: Use authentication (JWT, OAuth, API keys) and authorization filters ([Authorize]).
+
+Q: What is token-based authentication?  
+A: Clients authenticate once, receive a token (JWT), and include it in headers for subsequent requests.
+
+Q: How do you enable CORS in Web API?  
+A: Use EnableCors attribute or middleware to allow cross-origin requests.
+
+Advanced
+Q: How do you implement versioning in Web API?  
+A: By route (api/v1/products), query string (?version=1), or headers (Accept: application/vnd.myapi.v1+json).
+
+Q: What is dependency injection in Web API?  
+A: Injecting services into controllers using IoC containers like Unity, Autofac, or built-in DI in .NET Core.
+
+Q: How do you handle exceptions globally?  
+A: Use ExceptionFilterAttribute or GlobalConfiguration.Filters.Add(new CustomExceptionFilter()).
+
+Performance & Testing
+Q: How do you improve Web API performance?  
+A: Enable caching, compression, async methods, and minimize payload size.
+
+Q: How do you test Web API endpoints?  
+A: Using tools like Postman, Swagger, or unit tests with HttpClient.
+
+Q: What is Swagger in Web API?  
+A: An open-source tool for documenting and testing APIs interactively.
+
+Real-World Scenarios
+Q: How do you implement logging in Web API?  
+A: Use middleware, ActionFilter, or libraries like Serilog/NLog to log requests and responses.
+
+Q: How do you handle concurrency in Web API?  
+A: Use optimistic concurrency with entity versioning (row version/timestamp) or locking mechanisms.
