@@ -1,0 +1,102 @@
+🔹 What is Web API?
+ASP.NET Web API is a framework for building HTTP-based RESTful services.
+
+It allows applications to expose data and functionality to clients (browsers, mobile apps, IoT devices).
+
+It integrates seamlessly with ASP.NET MVC, making it easy to return JSON/XML responses.
+
+🔹 Why Use Web API in MVC?
+Lightweight alternative to WCF for REST services.
+
+Cross-platform compatibility: works with browsers, mobile apps, and external systems.
+
+Content negotiation: automatically returns JSON or XML depending on client request headers.
+
+Easy integration with MVC controllers and views.
+
+🔹 Key Features
+Routing: Attribute-based or convention-based routing.
+
+Model Binding: Maps HTTP request data to C# objects.
+
+Return Types: HttpResponseMessage, IHttpActionResult, or direct object serialization.
+
+Filters: Authentication, authorization, logging, exception handling.
+
+Security: Token-based authentication, OAuth, cookie-based authentication.
+
+Versioning: Supports multiple API versions for backward compatibility.
+
+🔹 Typical Workflow
+Create a Web API Controller (ApiController).
+
+Define endpoints (GetAll(), GetById(), Post(), Put(), Delete()).
+
+Return JSON/XML responses.
+
+Consume API via AJAX, Angular, React, or mobile apps.
+
+🎯 20 Interview Q&A on ASP.NET MVC Web API
+Basics
+Q: What is ASP.NET Web API and how does it differ from MVC controllers?
+A: Web API is designed for RESTful services over HTTP, returning JSON/XML data. MVC controllers are primarily for rendering views (HTML). Web API uses ApiController, while MVC uses Controller.
+
+Q: Why would you use Web API instead of WCF?
+A: WCF is heavy and suited for SOAP-based services. Web API is lightweight, RESTful, and better for JSON/XML over HTTP.
+
+Q: How does Web API handle JSON serialization?
+A: By default, Web API uses Json.NET for serialization. It automatically converts C# objects into JSON responses.
+
+Q: What is content negotiation in Web API?
+A: It’s the process where Web API decides whether to return JSON, XML, or other formats based on the client’s Accept headers.
+
+Q: How do you configure routing in Web API?
+A: Using attribute routing ([Route("api/products")]) or convention-based routing in WebApiConfig.cs.
+
+Intermediate
+Q: Difference between ApiController and Controller?
+A: ApiController is optimized for REST services, returning data (JSON/XML). Controller is for MVC views (HTML).
+
+Q: What are the common return types in Web API?
+A: HttpResponseMessage, IHttpActionResult, or direct object serialization (return Ok(product)).
+
+Q: How do you return custom HTTP status codes?
+A: By using HttpResponseMessage or IHttpActionResult (return StatusCode(HttpStatusCode.NotFound)).
+
+Q: How do you secure a Web API?
+A: Using JWT tokens, OAuth, API keys, or cookie-based authentication.
+
+Q: What is CORS and why is it needed?
+A: Cross-Origin Resource Sharing allows requests from different domains. It’s enabled using EnableCors attribute.
+
+Advanced
+Q: How do you implement dependency injection in Web API?
+A: By using IoC containers like Unity, Autofac, or built-in DI in .NET Core.
+
+Q: How do you handle exceptions globally in Web API?
+A: Using Exception Filters (IExceptionFilter) or middleware in .NET Core.
+
+Q: How do you implement paging and sorting in Web API?
+A: By passing query parameters (?page=1&pageSize=10) and applying LINQ operations on the dataset.
+
+Q: How do you refresh data in Web API calls (refresh=true scenario)?
+A: By checking query parameters (Request.GetQueryNameValuePairs()) and re-fetching data from the database.
+
+Q: How do you implement GetAll() and GetById() methods?
+A: GetAll() returns all records, while GetById(int id) fetches a single record using repository/service layer.
+
+Practical
+Q: How do you explicitly return JSON data?
+A: By setting return Json(product) or configuring GlobalConfiguration.Formatters.JsonFormatter.
+
+Q: Difference between synchronous and asynchronous Web API calls?
+A: Synchronous blocks the thread until completion. Asynchronous (async/await) improves scalability by freeing threads.
+
+Q: How do you enable versioning in Web API?
+A: Using query string (?v=1), URL segments (/api/v1/products), or custom headers.
+
+Q: How do you test Web API endpoints?
+A: Using Postman, Swagger (Swashbuckle), or Fiddler.
+
+Q: How do you integrate Web API with Angular/React?
+A: By making AJAX/Fetch/HttpClient calls to Web API endpoints and binding JSON responses to UI components.
