@@ -1,0 +1,132 @@
+Definition: A delegate in C# is a type-safe function pointer. It allows methods to be passed as parameters, stored in variables, and invoked dynamically.
+
+Type Safety: Delegates ensure that the method signature matches exactly (parameters + return type).
+
+Usage:
+
+Callbacks (e.g., notifying when a task is complete).
+
+Event handling (foundation of the event keyword).
+
+LINQ and anonymous methods.
+
+Syntax:
+
+csharp
+public delegate void PrintMessage(string msg);
+
+class Program {
+    static void Show(string text) {
+        Console.WriteLine(text);
+    }
+
+    static void Main() {
+        PrintMessage pm = Show;  // delegate points to Show
+        pm("Hello Delegate!");
+    }
+}
+Key Features:
+
+Can point to single or multiple methods (multicast delegates).
+
+Supports anonymous methods and lambda expressions.
+
+Forms the backbone of events in .NET.
+
+🎯 15 Long Interview Q&A on Delegates
+1. What is a delegate in C#?
+A delegate is a type that represents references to methods with a specific parameter list and return type. Unlike function pointers in C++, delegates are object-oriented and type-safe. They ensure that only methods with the correct signature can be assigned.
+
+2. Why do we need delegates?
+Delegates decouple the caller from the method implementation. For example, instead of hardcoding which method to call, you can pass a delegate, allowing flexible callbacks. This is heavily used in event-driven programming and asynchronous operations.
+
+3. How do you declare and use a delegate?
+Declaration: public delegate void MyDelegate(string msg);
+
+Instantiation: MyDelegate d = new MyDelegate(MethodName);
+
+Invocation: d("Hello");
+This allows methods to be treated like variables.
+
+4. What is a multicast delegate?
+A multicast delegate can hold references to multiple methods. When invoked, it calls all methods in its invocation list. Example:
+
+csharp
+MyDelegate d1 = MethodA;
+MyDelegate d2 = MethodB;
+MyDelegate d3 = d1 + d2;
+d3("Test"); // Calls MethodA and MethodB
+5. Difference between delegate and interface?
+Delegate: Used for callbacks, pointing to methods dynamically.
+
+Interface: Defines a contract that classes must implement.
+Delegates are more lightweight for single-method callbacks, while interfaces are better for structured contracts.
+
+6. What is the difference between delegate and event?
+Delegate: Can be invoked directly by anyone holding a reference.
+
+Event: Built on top of delegates, but restricts invocation to the class that declared it. Subscribers can only add/remove handlers, not invoke.
+
+7. Explain anonymous methods with delegates.
+Anonymous methods allow inline method definitions without a name:
+
+csharp
+MyDelegate d = delegate(string msg) {
+    Console.WriteLine(msg);
+};
+d("Hello Anonymous!");
+This reduces boilerplate code.
+
+8. How do lambda expressions relate to delegates?
+Lambda expressions are shorthand for anonymous methods. Example:
+
+csharp
+MyDelegate d = (msg) => Console.WriteLine(msg);
+This is concise and widely used in LINQ.
+
+9. What is a built-in delegate type in .NET?
+Action<T> → Represents a method that returns void.
+
+Func<T, TResult> → Represents a method that returns a value.
+
+Predicate<T> → Represents a method that returns a boolean.
+These are generic delegates provided by .NET to avoid custom delegate declarations.
+
+10. Can a delegate return a value?
+Yes, if the delegate signature specifies a return type. However, in multicast delegates, only the last method’s return value is considered, which can be tricky.
+
+11. How are delegates stored internally?
+Delegates are objects derived from System.Delegate. They store:
+
+Method reference (target method).
+
+Target object (for instance methods).
+This makes them more powerful than raw function pointers.
+
+12. What is covariance and contravariance in delegates?
+Covariance: Allows a delegate to reference a method that returns a more derived type.
+
+Contravariance: Allows a delegate to reference a method that takes parameters of a less derived type.
+This increases flexibility in assigning methods.
+
+13. How do delegates support event-driven programming?
+Events in C# are built on delegates. For example:
+
+csharp
+public delegate void Notify();
+public event Notify OnCompleted;
+Here, OnCompleted is an event that multiple subscribers can attach to. When triggered, all subscribers are notified.
+
+14. What is the difference between single-cast and multicast delegates?
+Single-cast: Points to one method.
+
+Multicast: Points to multiple methods. Achieved using + operator. Useful in event handling where multiple listeners respond.
+
+15. What are real-world use cases of delegates?
+GUI frameworks (button click events).
+
+Asynchronous programming (callback after task completion).
+
+LINQ queries (passing lambda expressions).
+
+Plug-in architectures (passing behavior dynamically).
