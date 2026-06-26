@@ -1,0 +1,233 @@
+. What is OOP and why is it important?
+Answer:  
+Object-Oriented Programming (OOP) is a paradigm that organizes software design around objects rather than functions or logic. Objects represent real-world entities and encapsulate both data (fields) and behavior (methods).
+Importance:
+
+Promotes code reusability via inheritance.
+
+Improves maintainability by encapsulating logic.
+
+Encourages modularity and scalability.
+Example: In a banking system, Account is an object with properties like balance and methods like deposit().
+
+2. Explain the four pillars of OOP.
+Answer:
+
+Encapsulation – Wrapping data and methods together, restricting direct access.
+
+Abstraction – Hiding implementation details, exposing only essential features.
+
+Inheritance – Deriving new classes from existing ones, reusing code.
+
+Polymorphism – Same interface, different implementations (method overriding/overloading).
+Together, they make systems flexible, reusable, and easier to maintain.
+
+3. What is Encapsulation? Give an example.
+Answer:  
+Encapsulation means binding data and methods into a single unit and controlling access using access modifiers (private, public, protected).
+Example in C#:
+
+csharp
+class BankAccount {
+    private double balance;
+    public void Deposit(double amount) { balance += amount; }
+    public double GetBalance() { return balance; }
+}
+Here, balance is hidden from direct access, ensuring data safety.
+
+4. What is Abstraction? How is it implemented?
+Answer:  
+Abstraction hides implementation details and shows only the necessary functionality.
+
+In C#, abstraction is achieved using abstract classes and interfaces.
+Example:
+
+csharp
+abstract class Shape {
+    public abstract void Draw();
+}
+class Circle : Shape {
+    public override void Draw() { Console.WriteLine("Drawing Circle"); }
+}
+The user only knows Draw() exists, not how it’s implemented.
+
+5. Difference between Abstraction and Encapsulation.
+Answer:
+
+Abstraction: Focuses on what an object does (hiding implementation).
+
+Encapsulation: Focuses on how data is protected (hiding data).
+Think of a car:
+
+Abstraction → You press the accelerator, car moves (you don’t know engine details).
+
+Encapsulation → Engine details are hidden inside the hood.
+
+6. What is Inheritance? Types of inheritance?
+Answer:  
+Inheritance allows a class (child) to acquire properties and behaviors of another class (parent).
+Types:
+
+Single: One parent → one child.
+
+Multilevel: Parent → Child → Grandchild.
+
+Hierarchical: One parent → multiple children.
+
+Multiple: Multiple parents → one child (not supported in C#, but interfaces solve this).
+Example: Dog inherits from Animal.
+
+7. What is Polymorphism? Explain with examples.
+Answer:  
+Polymorphism means many forms.
+
+Compile-time (Overloading): Same method name, different parameters.
+
+Runtime (Overriding): Child class provides a new implementation of parent’s method.
+Example:
+
+csharp
+class Animal {
+    public virtual void Speak() { Console.WriteLine("Animal sound"); }
+}
+class Dog : Animal {
+    public override void Speak() { Console.WriteLine("Bark"); }
+}
+8. Difference between Overloading and Overriding.
+Answer:
+
+Overloading: Same method name, different signatures, decided at compile-time.
+
+Overriding: Child class redefines parent’s method, decided at runtime.
+Overloading → Flexibility.
+Overriding → Dynamic behavior.
+
+9. What are Constructors and their types?
+Answer:  
+Constructors initialize objects.
+Types:
+
+Default constructor: No parameters.
+
+Parameterized constructor: Accepts arguments.
+
+Copy constructor: Creates a copy of another object.
+
+Static constructor: Initializes static members.
+Example:
+
+csharp
+class Student {
+    public Student() { } // default
+    public Student(string name) { } // parameterized
+}
+10. What is a Destructor?
+Answer:  
+Destructor cleans up resources when an object is destroyed. In C#, it’s defined using ~ClassName().
+Example:
+
+csharp
+class FileHandler {
+    ~FileHandler() { Console.WriteLine("Destructor called"); }
+}
+11. What is an Interface? How is it different from Abstract Class?
+Answer:
+
+Interface: Defines contract (only method signatures, no implementation).
+
+Abstract Class: Can have both abstract and concrete methods.
+Difference:
+
+Multiple inheritance possible with interfaces.
+
+Abstract class allows partial implementation.
+Example:
+
+csharp
+interface IShape { void Draw(); }
+12. What is a Class vs Object?
+Answer:
+
+Class: Blueprint/template (defines properties and methods).
+
+Object: Instance of a class (real entity).
+Example:
+Car is a class. myCar = new Car() is an object.
+
+13. What is a Static Class and Static Members?
+Answer:
+
+Static class: Cannot be instantiated, contains only static members.
+
+Static members: Belong to the class, not to objects.
+Example:
+
+csharp
+static class MathHelper {
+    public static int Add(int a, int b) => a + b;
+}
+14. What is Method Hiding?
+Answer:  
+When a child class defines a method with the same name as parent but without override, it hides the parent’s method.
+Example:
+
+csharp
+class Parent { public void Show() { Console.WriteLine("Parent"); } }
+class Child : Parent { public new void Show() { Console.WriteLine("Child"); } }
+15. What is Composition vs Inheritance?
+Answer:
+
+Inheritance: "Is-a" relationship (Dog is an Animal).
+
+Composition: "Has-a" relationship (Car has an Engine).
+Composition is often preferred for flexibility and avoiding tight coupling.
+
+16. What is an Abstract Class? Why use it?
+Answer:  
+Abstract class cannot be instantiated. It provides a base for other classes with abstract methods that must be implemented.
+Use: When you want to enforce a common structure but allow different implementations.
+Example: Shape with abstract Draw().
+
+17. What is Multiple Inheritance? Is it supported in C#?
+Answer:  
+Multiple inheritance means a class inherits from more than one class.
+
+Not supported in C# (to avoid ambiguity).
+
+Achieved using interfaces.
+Example:
+
+csharp
+interface IPrinter { void Print(); }
+interface IScanner { void Scan(); }
+class Machine : IPrinter, IScanner { ... }
+18. What is a Virtual Method?
+Answer:  
+A method declared with virtual keyword in base class can be overridden in derived class.
+Example:
+
+csharp
+class Animal { public virtual void Speak() { Console.WriteLine("Animal"); } }
+19. What is Sealed Class and Sealed Method?
+Answer:
+
+Sealed class: Cannot be inherited.
+
+Sealed method: Cannot be overridden further.
+Example:
+
+csharp
+sealed class FinalClass { }
+20. What are Access Modifiers in OOP?
+Answer:  
+They define scope of members:
+
+Public: Accessible everywhere.
+
+Private: Accessible only within class.
+
+Protected: Accessible in class + derived classes.
+
+Internal: Accessible within same assembly.
+
+Protected Internal: Combination of protected + internal.
