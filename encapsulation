@@ -1,0 +1,67 @@
+Definition: Encapsulation is one of the pillars of OOP. It means wrapping data (fields) and methods (functions) together inside a class and controlling access using access modifiers (private, public, protected).
+
+Purpose: Protects internal state, exposes only what’s necessary, and prevents unintended interference.
+
+Analogy: Think of a capsule medicine 💊 — the outer shell hides the ingredients, but you still get the effect when consumed.
+
+🔑 Example
+csharp
+public class BankAccount
+{
+    private double balance; // hidden data
+
+    public void Deposit(double amount)
+    {
+        balance += amount;
+    }
+
+    public double GetBalance()
+    {
+        return balance; // controlled access
+    }
+}
+📌 ref and out in C#
+Encapsulation often pairs with controlled parameter passing.
+
+ref keyword: Passes a variable by reference. The variable must be initialized before being passed.
+
+out keyword: Also passes by reference, but the variable must be assigned inside the method before returning.
+
+Example
+csharp
+class Demo
+{
+    public void Add(ref int x, int y)
+    {
+        x = x + y; // modifies original value
+    }
+
+    public void Divide(int a, int b, out int quotient, out int remainder)
+    {
+        quotient = a / b;
+        remainder = a % b; // assigns values before returning
+    }
+}
+🎯 20 Interview Q&A (Encapsulation + ref/out)
+Q#	Question	Answer
+1	What is encapsulation in C#?	Encapsulation is binding data and methods together inside a class and restricting direct access using access modifiers.
+2	Why is encapsulation important?	It improves security, hides implementation details, and provides controlled access.
+3	How do access modifiers support encapsulation?	private hides members, public exposes controlled APIs, protected allows subclass access.
+4	Give a real-world example of encapsulation.	A car: you use the steering wheel and pedals (public methods), but engine details are hidden (private fields).
+5	Difference between encapsulation and abstraction?	Encapsulation = hiding data implementation. Abstraction = hiding complexity by exposing only essential features.
+6	Can encapsulation exist without classes?	No, encapsulation is achieved through classes/structs in OOP.
+7	How do properties help encapsulation in C#?	Properties (get/set) allow controlled access to private fields.
+8	Example of encapsulation using properties?	csharp private int age; public int Age { get { return age; } set { if(value>0) age=value; } }
+9	What is the default access modifier in C# class members?	private.
+10	How does encapsulation improve maintainability?	Changes inside a class don’t affect external code since only public APIs are exposed.
+11	What is ref in C#?	A keyword to pass variables by reference, requiring initialization before use.
+12	What is out in C#?	A keyword to pass variables by reference, requiring assignment inside the method before returning.
+13	Difference between ref and out?	ref requires initialization before passing; out requires assignment inside the method.
+14	Can a method have both ref and out parameters?	Yes, but they serve different purposes.
+15	Example of ref usage?	csharp int a=5; Add(ref a,10); // modifies a
+16	Example of out usage?	csharp Divide(10,3,out q,out r);
+17	Why use ref instead of returning a value?	To modify multiple variables directly without creating extra return types.
+18	Why use out instead of returning a value?	To return multiple values from a single method.
+19	Can ref and out be used with properties?	No, only with variables.
+20	How do ref and out relate to encapsulation?	They allow controlled manipulation of data while still keeping fields private inside classes.
+
