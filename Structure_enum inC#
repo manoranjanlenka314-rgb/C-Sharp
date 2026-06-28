@@ -1,0 +1,129 @@
+Summary: Enum in C#
+Definition: An enum (short for enumeration) is a distinct type that defines a set of named constants.
+
+Purpose: Improves readability and avoids using “magic numbers” or hard-coded values.
+
+Underlying Type: By default, int, but you can specify (byte, short, long, etc.).
+
+Example:
+
+csharp
+enum Days { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
+
+Days today = Days.Monday;
+Console.WriteLine(today); // Output: Monday
+Key Points:
+
+Enums are value types.
+
+Can be cast to/from their underlying numeric type.
+
+Useful in switch statements.
+
+📖 Summary: Struct in C#
+Definition: A struct is a value type that can contain fields, methods, properties, and constructors.
+
+Purpose: Used for lightweight objects that don’t require inheritance.
+
+Memory: Stored on the stack (unlike classes which are reference types stored on the heap).
+
+Example:
+
+csharp
+struct Point
+{
+    public int X;
+    public int Y;
+
+    public Point(int x, int y)
+    {
+        X = x;
+        Y = y;
+    }
+}
+
+Point p = new Point(10, 20);
+Console.WriteLine($"X={p.X}, Y={p.Y}");
+Key Points:
+
+Cannot have a default parameterless constructor (compiler provides one automatically).
+
+Cannot inherit from another struct or class (but can implement interfaces).
+
+Best for small, immutable data structures.
+
+🎯 Interview Notes
+Enum vs Struct → Enum is for named constants; Struct is for grouping related data.
+
+Struct vs Class → Struct = value type, Class = reference type.
+
+Performance → Structs are faster for small data, but copying large structs is costly.
+
+Enums in Switch → Cleaner branching logic.
+
+Boxing → Structs can be boxed when cast to object.
+
+📝 20 Interview Q&A
+Enum
+Q: What is an enum in C#?
+A: A distinct type that defines a set of named constants, improving readability.
+
+Q: What is the default underlying type of an enum?
+A: int.
+
+Q: Can you change the underlying type of an enum?
+A: Yes, by specifying (byte, short, long, etc.).
+
+Q: How do you assign custom values to enum members?
+A: Example:
+
+csharp
+enum Status { Started = 1, InProgress = 5, Completed = 10 }
+Q: Can enums contain methods?
+A: No, enums only contain constants.
+
+Q: How do you convert an enum to its integer value?
+A: (int)Days.Monday.
+
+Q: How do you parse a string to an enum?
+A: Enum.Parse(typeof(Days), "Monday").
+
+Q: Can enums be used in switch statements?
+A: Yes, very commonly.
+
+Q: What happens if you assign a value outside the defined enum?
+A: It compiles, but may cause logical errors.
+
+Q: Can enums be nested inside classes?
+A: Yes.
+
+Struct
+Q: What is a struct in C#?
+A: A value type that groups related variables and can contain methods.
+
+Q: How does struct memory allocation differ from class?
+A: Structs are stored on the stack, classes on the heap.
+
+Q: Can structs inherit from other structs or classes?
+A: No, but they can implement interfaces.
+
+Q: Can structs have constructors?
+A: Yes, but not parameterless ones (compiler provides default).
+
+Q: Can structs have destructors?
+A: No.
+
+Q: Can structs contain static members?
+A: Yes, they can.
+
+Q: What happens when you assign one struct to another?
+A: A copy is made (value type semantics).
+
+Q: When should you use a struct instead of a class?
+A: For small, lightweight objects that don’t need inheritance.
+
+Q: Can structs be nullable?
+A: Yes, using Nullable<T> or ?.
+
+Q: What is boxing in relation to structs?
+A: Converting a struct (value type) to an object (reference type).
