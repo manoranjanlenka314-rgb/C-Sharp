@@ -1,0 +1,280 @@
+Summary of .NET, C#, and ASP.NET MVC/Core
+🔹 What is .NET?
+.NET Framework: Microsoft’s original runtime for Windows desktop/web apps.
+
+.NET Core: Cross-platform, open-source successor (Windows, Linux, macOS).
+
+.NET 5+ (Unified .NET): Combines .NET Framework and Core into one platform.
+
+Provides CLR (Common Language Runtime) for execution and BCL (Base Class Library) for reusable components.
+
+🔹 C# Language
+Object-oriented, type-safe, modern language.
+
+Features: Classes, Interfaces, Generics, LINQ, Delegates, Events, Async/Await.
+
+Strongly integrated with .NET runtime.
+
+🔹 ASP.NET MVC / Core
+MVC Pattern: Model (data), View (UI), Controller (logic).
+
+ASP.NET MVC: Framework for building web apps on .NET Framework.
+
+ASP.NET Core MVC: Cross-platform, lightweight, modular, supports Razor Pages, Web API, and Blazor.
+
+Key features: Routing, Middleware, Dependency Injection, Tag Helpers, Identity for authentication.
+
+🔹 Why .NET is Popular
+Cross-platform development.
+
+Rich ecosystem (NuGet packages, Visual Studio tooling).
+
+Performance improvements in .NET Core.
+
+Enterprise-grade security and scalability.
+
+📝 25 Interview Questions & Answers (Detailed)
+1. What is the CLR in .NET?
+Answer:  
+The Common Language Runtime (CLR) is the execution engine of .NET. It provides:
+
+Memory management (Garbage Collection).
+
+Type safety.
+
+Exception handling.
+
+JIT compilation (IL → native code).
+
+Security enforcement.
+Think of CLR as the “brain” that runs all .NET applications.
+
+2. Difference between .NET Framework, .NET Core, and .NET 5+?
+Answer:
+
+.NET Framework: Windows-only, legacy.
+
+.NET Core: Cross-platform, modular, high performance.
+
+.NET 5+: Unified platform, supports desktop, mobile, cloud, IoT.
+Example: A web app built in .NET Core can run on Linux servers, unlike .NET Framework.
+
+3. Explain Managed vs Unmanaged Code.
+Answer:
+
+Managed Code: Runs under CLR supervision (C#, VB.NET). CLR handles memory, exceptions.
+
+Unmanaged Code: Runs directly on OS (C/C++). Developer must manage memory manually.
+Example: Calling a C++ DLL from C# requires P/Invoke.
+
+4. What is JIT Compilation?
+Answer:
+
+JIT = Just-In-Time compiler.
+
+Converts IL (Intermediate Language) into native machine code at runtime.
+
+Types: Pre-JIT, Econo-JIT, Normal JIT.
+Benefit: Optimized execution for the target machine.
+
+5. Explain Garbage Collection in .NET.
+Answer:
+
+GC automatically frees unused memory.
+
+Works in generations (0,1,2) for efficiency.
+
+Uses mark-and-sweep algorithm.
+Example: Local variables in a method are collected once the method finishes.
+
+6. What are Assemblies in .NET?
+Answer:
+
+Assemblies = compiled code units (.dll or .exe).
+
+Contain metadata + IL code.
+
+Two types: Private (used by one app) and Shared (GAC).
+Example: Newtonsoft.Json.dll is a shared assembly used across apps.
+
+7. Difference between Value Type and Reference Type in C#.
+Answer:
+
+Value Type: Stored in stack (int, struct). Copy by value.
+
+Reference Type: Stored in heap (class, object). Copy by reference.
+Example: int a=5; int b=a; → independent copies.
+Class obj1=obj2; → both point to same memory.
+
+8. What is Boxing and Unboxing?
+Answer:
+
+Boxing: Converting value type → object.
+int x=10; object o=x;
+
+Unboxing: Converting object → value type.
+int y=(int)o;  
+Performance hit occurs due to heap allocation.
+
+9. Explain Delegates in C#.
+Answer:
+
+Delegate = type-safe function pointer.
+
+Used for callbacks, event handling.
+Example:
+
+csharp
+public delegate void Print(string msg);
+Print p = Console.WriteLine;
+p("Hello");
+10. What are Events in C#?
+Answer:
+
+Events = wrapper around delegates.
+
+Publisher/Subscriber model.
+Example: Button click in WinForms triggers an event.
+
+11. Explain LINQ in C#.
+Answer:
+
+Language Integrated Query.
+
+Query collections using SQL-like syntax.
+Example:
+
+csharp
+var result = from s in students
+             where s.Age > 18
+             select s.Name;
+12. Difference between Abstract Class and Interface.
+Answer:
+
+Abstract Class: Can have fields, constructors, default implementations.
+
+Interface: Only contracts (methods, properties).
+Example: Use abstract class for base functionality, interface for multiple inheritance.
+
+13. What is Dependency Injection in ASP.NET Core?
+Answer:
+
+DI = design pattern to decouple objects.
+
+ASP.NET Core has built-in DI container.
+Example:
+
+csharp
+services.AddScoped<IRepo, Repo>();
+Controller gets IRepo injected automatically.
+
+14. Explain Middleware in ASP.NET Core.
+Answer:
+
+Middleware = pipeline components that handle requests/responses.
+
+Example: Authentication, Logging, Routing.
+Code:
+
+csharp
+app.UseRouting();
+app.UseAuthentication();
+app.UseEndpoints(...);
+15. Difference between MVC and Web API.
+Answer:
+
+MVC: Returns Views (HTML).
+
+Web API: Returns data (JSON/XML).
+Example: MVC for user-facing website, Web API for mobile app backend.
+
+16. Explain Routing in ASP.NET Core MVC.
+Answer:
+
+Maps URL → Controller/Action.
+
+Types: Conventional, Attribute routing.
+Example:
+
+csharp
+[Route("api/[controller]")]
+public class ProductsController : Controller { }
+17. What is Razor in ASP.NET Core?
+Answer:
+
+Razor = view engine for mixing C# + HTML.
+
+Syntax: @Model.Name inside HTML.
+Lightweight compared to WebForms.
+
+18. Explain Authentication vs Authorization.
+Answer:
+
+Authentication: Verifying identity (login).
+
+Authorization: Verifying access rights (roles/permissions).
+Example: User logs in (authN), then allowed to view admin page (authZ).
+
+19. What is ASP.NET Identity?
+Answer:
+
+Membership system for authentication/authorization.
+
+Supports roles, claims, external logins (Google, Facebook).
+Example: UserManager class manages users.
+
+20. Explain Entity Framework Core.
+Answer:
+
+ORM for .NET.
+
+Maps C# classes → DB tables.
+
+Supports LINQ queries.
+Example:
+
+csharp
+var users = db.Users.Where(u => u.IsActive).ToList();
+21. Difference between Synchronous and Asynchronous programming.
+Answer:
+
+Sync: Blocks until task completes.
+
+Async: Frees thread, continues later.
+Example:
+
+csharp
+await db.Users.ToListAsync();
+22. Explain Threading in C#.
+Answer:
+
+Thread = unit of execution.
+
+Managed via Thread class or Task Parallel Library.
+Example: Task.Run(()=>DoWork());
+
+23. What is ViewData, ViewBag, TempData in MVC?
+Answer:
+
+ViewData: Dictionary, requires casting.
+
+ViewBag: Dynamic wrapper around ViewData.
+
+TempData: Stores data for one request (redirect).
+Example: TempData["msg"]="Saved";
+
+24. Explain Filters in ASP.NET MVC.
+Answer:
+
+Filters = attributes for cross-cutting concerns.
+
+Types: Authorization, Action, Result, Exception.
+Example: [Authorize] ensures only logged-in users access.
+
+25. Explain Difference between .NET Core and .NET Framework in terms of Hosting.
+Answer:
+
+.NET Framework: Hosted on IIS.
+
+.NET Core: Self-hosted via Kestrel, can integrate with IIS, Nginx, Apache.
+Benefit: Cross-platform deployment flexibility.
