@@ -1,0 +1,68 @@
+🚀 Deployment Process (Interview-Ready Summary)
+1. Preparation
+Create Azure Account & Resource Group
+
+Resource Group organizes services (App Service, SQL DB, Storage).
+
+Build the ASP.NET Core MVC App
+
+Use dotnet publish -c Release to generate optimized binaries.
+
+2. Deployment Options
+Visual Studio Publish Wizard
+
+Right‑click project → Publish → Select Azure App Service → Configure hosting plan, resource group, and database.
+
+Azure CLI
+
+Example:
+
+bash
+az webapp up --name MyMvcApp --resource-group MyRG --runtime "DOTNET|6.0"
+```  
+CI/CD with Azure DevOps
+
+Automates build, test, and deployment pipelines. Interviewers often ask about YAML pipelines and integration with GitHub.
+
+3. Service Dependencies
+Azure SQL Database for persistence.
+
+Configure connection strings in App Service → Configuration → Application Settings.
+
+Use Managed Identity for secure DB access (no hardcoded credentials).
+
+4. Scaling & Monitoring
+Scaling:
+
+Vertical (increase instance size) or Horizontal (add instances).
+
+Auto‑scaling rules based on CPU/memory.
+
+Monitoring:
+
+Azure Application Insights for request duration, failure rates, dependency tracking.
+
+Interviewers expect you to mention p95 latency, SQL DTU usage, and connection pool exhaustion.
+
+5. Security
+Authentication: Azure AD, OAuth, JWT.
+
+RBAC (Role-Based Access Control) for resource permissions.
+
+CORS configuration for APIs.
+
+🎯 Interview-Focused Q&A
+Question	Strong Answer (Interview Style)
+How do you deploy an ASP.NET Core MVC app to Azure?	“I use Visual Studio Publish or Azure CLI to push builds to Azure App Service. For production, I prefer CI/CD pipelines in Azure DevOps for automated deployments.”
+Difference between Azure App Service and Azure Functions?	“App Service hosts full MVC apps with persistent state, while Functions are serverless, event-driven, ideal for lightweight tasks like notifications or background jobs.”
+How do you secure DB connections in Azure?	“I use Managed Identity instead of connection strings with credentials, ensuring secure authentication to Azure SQL Database.”
+How do you handle scaling?	“I configure auto-scaling rules in App Service based on CPU/memory thresholds, and use caching (Redis) to reduce DB load.”
+What monitoring tools do you use?	“Azure Application Insights for telemetry, logging, and performance metrics. I track p95 latency, SQL query performance, and autoscale events.”
+
+
+⚠️ Risks & Trade-Offs (Interview Insight)
+Preview SDKs: Not always supported in Azure App Service. Must check compatibility.
+
+Cost vs. Performance: Scaling horizontally increases cost; caching and query optimization may be cheaper.
+
+Vendor Lock-In: Heavy reliance on Azure services (Functions, Cosmos DB) ties architecture to Microsoft ecosystem.
