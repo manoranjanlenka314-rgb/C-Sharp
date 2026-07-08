@@ -1,0 +1,185 @@
+Brief Summary → a compact overview of C# interview topics.
+
+Deep Dive Q&A → long, detailed explanations with examples for practice.
+
+⚡ Brief Summary of C# Interview Topics
+OOP Concepts: Encapsulation, Inheritance, Polymorphism, Abstraction.
+
+Data Types & Memory: Value vs Reference types, Garbage Collection.
+
+C# Basics: Constructors, Methods, Properties, Indexers, Delegates, Events.
+
+Advanced Features: LINQ, Async/Await, Generics, Collections.
+
+Error Handling: Exception hierarchy, try-catch-finally, custom exceptions.
+
+Threading: Multithreading, Task Parallel Library, async patterns.
+
+Design Patterns: Singleton, Factory, Repository, Dependency Injection.
+
+ASP.NET MVC: Controllers, Views, Models, Routing, Filters, State Management.
+
+Security: Authentication, Authorization, Cookies, Session, SQL Injection prevention.
+
+SQL Integration: ADO.NET, Entity Framework, LINQ-to-SQL.
+
+🔎 Deep Dive Q&A with Examples
+Q1: What is the difference between Value Type and Reference Type in C#?
+Answer:
+
+Value Type: Stores data directly in memory (stack). Examples: int, struct.
+
+Reference Type: Stores a reference (pointer) to data (heap). Examples: class, string, object.
+
+Example:
+
+csharp
+int a = 10;       // Value type
+int b = a;        // Copy of value
+b = 20;           // 'a' remains 10
+
+class Person { public string Name; }
+Person p1 = new Person();
+p1.Name = "Manoranjan";
+Person p2 = p1;   // Reference copy
+p2.Name = "Broo"; // p1.Name also changes
+👉 Interview Tip: Emphasize stack vs heap and copy vs reference behavior.
+
+Q2: Explain Encapsulation with an example.
+Answer:  
+Encapsulation is wrapping data and methods into a single unit (class) and restricting direct access using access modifiers.
+
+Example:
+
+csharp
+class BankAccount {
+    private double balance; // hidden data
+
+    public void Deposit(double amount) {
+        balance += amount;
+    }
+
+    public double GetBalance() {
+        return balance;
+    }
+}
+👉 Interview Tip: Show how private protects data and public exposes controlled access.
+
+Q3: What is the difference between Method Overloading and Method Overriding?
+Answer:
+
+Overloading: Same method name, different parameters (compile-time polymorphism).
+
+Overriding: Redefining a base class method in a derived class (runtime polymorphism).
+
+Example:
+
+csharp
+// Overloading
+class Calculator {
+    public int Add(int a, int b) => a + b;
+    public double Add(double a, double b) => a + b;
+}
+
+// Overriding
+class Animal {
+    public virtual void Speak() => Console.WriteLine("Animal sound");
+}
+class Dog : Animal {
+    public override void Speak() => Console.WriteLine("Woof!");
+}
+Q4: What is the difference between Abstract Class and Interface?
+Answer:
+
+Abstract Class: Can have fields, constructors, and implemented methods. Supports inheritance.
+
+Interface: Only contains method signatures (until C# 8 default implementations). Supports multiple inheritance.
+
+Example:
+
+csharp
+abstract class Shape {
+    public abstract void Draw();
+    public void Info() => Console.WriteLine("Shape Info");
+}
+
+interface IPrintable {
+    void Print();
+}
+
+class Circle : Shape, IPrintable {
+    public override void Draw() => Console.WriteLine("Drawing Circle");
+    public void Print() => Console.WriteLine("Printing Circle");
+}
+Q5: Explain Delegates and Events in C#.
+Answer:
+
+Delegate: Type-safe function pointer.
+
+Event: Wrapper around delegate, used for publish-subscribe model.
+
+Example:
+
+csharp
+public delegate void Notify(); // delegate
+
+class Process {
+    public event Notify ProcessCompleted; // event
+
+    public void Start() {
+        Console.WriteLine("Process Started");
+        ProcessCompleted?.Invoke(); // trigger event
+    }
+}
+
+class Program {
+    static void Main() {
+        Process p = new Process();
+        p.ProcessCompleted += () => Console.WriteLine("Process Finished!");
+        p.Start();
+    }
+}
+Q6: Explain LINQ with an example.
+Answer:  
+LINQ (Language Integrated Query) allows querying collections using SQL-like syntax.
+
+Example:
+
+csharp
+int[] numbers = { 1, 2, 3, 4, 5, 6 };
+
+var evenNumbers = from n in numbers
+                  where n % 2 == 0
+                  select n;
+
+foreach (var num in evenNumbers)
+    Console.WriteLine(num); // 2,4,6
+Q7: What is Dependency Injection (DI) in C#?
+Answer:  
+DI is a design pattern where dependencies are injected into a class instead of being created inside it. Improves testability and loose coupling.
+
+Example:
+
+csharp
+interface IMessageService {
+    void SendMessage(string msg);
+}
+
+class EmailService : IMessageService {
+    public void SendMessage(string msg) => Console.WriteLine("Email: " + msg);
+}
+
+class Notification {
+    private readonly IMessageService _service;
+    public Notification(IMessageService service) {
+        _service = service;
+    }
+    public void Notify(string msg) => _service.SendMessage(msg);
+}
+
+class Program {
+    static void Main() {
+        IMessageService service = new EmailService();
+        Notification n = new Notification(service);
+        n.Notify("Hello DI!");
+    }
