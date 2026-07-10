@@ -1,0 +1,131 @@
+📘 Long Summary: .NET, C#, and MVC
+🔹 .NET Framework & .NET Core
+.NET is a Microsoft ecosystem for building applications (web, desktop, mobile, cloud).
+
+It provides:
+
+CLR (Common Language Runtime): Manages execution, memory, garbage collection, security.
+
+BCL (Base Class Library): Prebuilt classes for I/O, collections, threading, etc.
+
+.NET Framework → Windows‑only, older.
+
+.NET Core / .NET 5+ → Cross‑platform, open source, modern.
+
+🔹 C# Language
+Object‑oriented, type‑safe language.
+
+Features:
+
+Encapsulation, inheritance, polymorphism.
+
+LINQ, async/await, delegates, events.
+
+Strong typing with generics.
+
+Used for backend logic, APIs, desktop apps, and game development (Unity).
+
+🔹 ASP.NET MVC
+MVC Pattern:
+
+Model: Business logic + data.
+
+View: UI layer (HTML, Razor).
+
+Controller: Handles requests, connects Model & View.
+
+Benefits:
+
+Separation of concerns.
+
+Testability.
+
+Extensibility.
+
+Features:
+
+Routing, filters, dependency injection.
+
+Supports REST APIs.
+
+Works with Entity Framework for database access.
+
+🔹 Real‑World Usage
+Enterprise apps (banking, HR, ERP).
+
+APIs for mobile/web.
+
+Secure authentication (cookies, JWT).
+
+Integration with SQL Server, Azure.
+
+🎯 20 Real‑Time Industrial Fresher‑Level Interview Q&A
+Basics
+Q: What is CLR in .NET?
+A: CLR is the runtime that executes .NET code, handling memory management, type safety, garbage collection, and exception handling.
+
+Q: Difference between .NET Framework and .NET Core?
+A: Framework is Windows‑only, Core is cross‑platform, faster, modular, and open source.
+
+Q: What are value types vs reference types in C#?
+A: Value types store data directly (int, struct), reference types store memory addresses (class, object, string).
+
+Q: Explain boxing and unboxing.
+A: Boxing converts value type → object; unboxing converts object → value type.
+
+Q: What is garbage collection?
+A: Automatic memory cleanup of unused objects by CLR.
+
+OOP & C#
+Q: Difference between abstraction and encapsulation?
+A: Abstraction hides implementation (interfaces/abstract classes), encapsulation hides data via access modifiers.
+
+Q: What is method overloading vs overriding?
+A: Overloading = same method name, different parameters. Overriding = child class redefines parent method using virtual and override.
+
+Q: What are delegates in C#?
+A: Delegates are type‑safe function pointers used for callbacks and event handling.
+
+Q: Explain async/await.
+A: Keywords for asynchronous programming, allowing non‑blocking calls (e.g., database, API requests).
+
+Q: What is LINQ?
+A: Language Integrated Query, used to query collections/DBs with SQL‑like syntax inside C#.
+
+ASP.NET MVC
+Q: Explain MVC architecture.
+A: Model = data, View = UI, Controller = request handler. It separates concerns for maintainability.
+
+Q: What is routing in MVC?
+A: Routing maps URLs to controller actions using RouteConfig or attribute routing.
+
+Q: Difference between ViewBag, ViewData, TempData?
+A:
+
+ViewBag: dynamic, short‑lived.
+
+ViewData: dictionary, short‑lived.
+
+TempData: persists across redirects.
+
+Q: What are filters in MVC?
+A: Attributes applied to controllers/actions for cross‑cutting concerns (e.g., [Authorize], [HandleError]).
+
+Q: How do you connect MVC with a database?
+A: Using Entity Framework (ORM) with DbContext, LINQ queries, migrations.
+
+Real‑Time Industrial Scenarios
+Q: How would you implement authentication in MVC?
+A: Using ASP.NET Identity, cookies, or JWT tokens. Configure middleware and secure routes with [Authorize].
+
+Q: How do you handle exceptions globally in MVC?
+A: Using HandleErrorAttribute, custom middleware, or ExceptionFilter.
+
+Q: How do you improve performance in MVC apps?
+A: Caching, async calls, minimizing ViewState, bundling/minification, optimizing DB queries.
+
+Q: How do you secure SQL queries in .NET?
+A: Use parameterized queries or Entity Framework LINQ to prevent SQL injection.
+
+Q: How do you deploy an MVC app to production?
+A: Publish via Visual Studio → IIS/Azure. Configure connection strings, environment variables, and logging.
