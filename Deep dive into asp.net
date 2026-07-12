@@ -1,0 +1,170 @@
+1. Introduction
+ASP.NET is a web application framework developed by Microsoft.
+
+It allows developers to build dynamic websites, web applications, and services using C# or VB.NET.
+
+Runs on the .NET Framework or .NET Core (.NET 5/6/7).
+
+2. Key Features
+Server-side technology: Executes code on the server before sending HTML to the client.
+
+Language independence: Supports multiple .NET languages.
+
+Rich toolbox: Includes controls, libraries, and built-in authentication.
+
+State management: ViewState, Session, Cookies, QueryStrings.
+
+Security: Built-in authentication, authorization, and role management.
+
+Scalability: Supports caching, load balancing, and deployment in enterprise environments.
+
+3. ASP.NET Components
+Web Forms: Event-driven, drag-and-drop UI development.
+
+MVC (Model-View-Controller): Separation of concerns, testability, clean architecture.
+
+Web API: RESTful services for mobile/web clients.
+
+SignalR: Real-time communication (chat apps, live dashboards).
+
+Razor Pages: Lightweight page-based coding model.
+
+4. ASP.NET Lifecycle
+Request → Routing → Controller/Page → Execution → Rendering → Response.
+
+Events: Application_Start, Page_Load, Session_Start, etc.
+
+5. Data Access in ASP.NET
+Uses ADO.NET for database connectivity.
+
+Classes like SqlConnection, SqlCommand, SqlDataReader, SqlDataAdapter, DataSet, DataTable.
+
+Supports Entity Framework for ORM-based access.
+
+🎯 Interview-Based Q&A on SQL Connection Classes in ASP.NET
+Q1: What is SqlConnection in ASP.NET?
+Answer:
+
+SqlConnection is used to establish a connection between ASP.NET applications and SQL Server.
+
+Requires a connection string (server, database, authentication).
+
+Example:
+
+csharp
+using (SqlConnection conn = new SqlConnection("Data Source=.;Initial Catalog=MyDB;Integrated Security=True"))
+{
+    conn.Open();
+    Console.WriteLine("Connection successful!");
+}
+Q2: Explain SqlCommand with an example.
+Answer:
+
+Executes SQL queries or stored procedures.
+
+Can be used for SELECT, INSERT, UPDATE, DELETE.
+
+csharp
+using (SqlConnection conn = new SqlConnection("..."))
+{
+    SqlCommand cmd = new SqlCommand("SELECT * FROM Employees", conn);
+    conn.Open();
+    SqlDataReader reader = cmd.ExecuteReader();
+    while (reader.Read())
+    {
+        Console.WriteLine(reader["Name"]);
+    }
+}
+Q3: What is SqlDataReader and how is it different from SqlDataAdapter?
+Answer:
+
+SqlDataReader: Forward-only, read-only stream of data. Fast and memory-efficient.
+
+SqlDataAdapter: Works with DataSet/DataTable, allows disconnected data access.
+
+csharp
+// SqlDataReader Example
+SqlDataReader dr = cmd.ExecuteReader();
+while (dr.Read()) { Console.WriteLine(dr["Name"]); }
+
+// SqlDataAdapter Example
+SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Employees", conn);
+DataTable dt = new DataTable();
+da.Fill(dt);
+Q4: What is DataSet and DataTable in ASP.NET?
+Answer:
+
+DataSet: In-memory representation of multiple tables, relationships, constraints.
+
+DataTable: Represents a single table.
+
+csharp
+SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Employees", conn);
+DataSet ds = new DataSet();
+da.Fill(ds, "Employees");
+foreach (DataRow row in ds.Tables["Employees"].Rows)
+{
+    Console.WriteLine(row["Name"]);
+}
+Q5: How do you use SqlParameter in SqlCommand?
+Answer:
+
+Prevents SQL Injection.
+
+csharp
+SqlCommand cmd = new SqlCommand("SELECT * FROM Employees WHERE Id=@Id", conn);
+cmd.Parameters.AddWithValue("@Id", 101);
+SqlDataReader dr = cmd.ExecuteReader();
+Q6: What is Connection Pooling in ASP.NET?
+Answer:
+
+Reuses existing connections instead of opening new ones.
+
+Improves performance.
+
+Enabled by default in SqlConnection.
+
+Q7: Difference between ExecuteReader(), ExecuteScalar(), and ExecuteNonQuery().
+Answer:
+
+ExecuteReader() → Returns multiple rows (SqlDataReader).
+
+ExecuteScalar() → Returns a single value.
+
+ExecuteNonQuery() → Executes queries like INSERT/UPDATE/DELETE, returns affected rows.
+
+csharp
+int count = (int)cmd.ExecuteScalar(); // Example
+Q8: How do you handle transactions in ASP.NET using ADO.NET?
+Answer:
+
+csharp
+SqlTransaction tran = conn.BeginTransaction();
+SqlCommand cmd = new SqlCommand("INSERT INTO Employees(Name) VALUES('John')", conn, tran);
+cmd.ExecuteNonQuery();
+tran.Commit();
+Q9: What is SqlDataAdapter.Update() method used for?
+Answer:
+
+Updates database with changes made in DataSet/DataTable.
+
+csharp
+SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Employees", conn);
+SqlCommandBuilder cb = new SqlCommandBuilder(da);
+DataTable dt = new DataTable();
+da.Fill(dt);
+dt.Rows[0]["Name"] = "Updated Name";
+da.Update(dt);
+Q10: Explain using statement with SqlConnection.
+Answer:
+
+Ensures automatic disposal of connection.
+
+Prevents memory leaks.
+
+csharp
+using (SqlConnection conn = new SqlConnection("..."))
+{
+    conn.Open();
+    // Work with DB
+}
