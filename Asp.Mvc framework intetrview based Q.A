@@ -1,0 +1,271 @@
+🌐 ASP.NET MVC Fundamentals (Beginner-Friendly)
+1. MVC Architecture
+Model → Represents data and business logic (like a database table or domain object).
+
+View → UI layer (HTML, CSS, Razor syntax).
+
+Controller → Handles requests, processes input, and returns responses.
+
+👉 Analogy: Think of a restaurant.
+
+Model = Kitchen (ingredients + recipes).
+
+Controller = Waiter (takes orders, communicates between kitchen and customer).
+
+View = Plate of food (presentation to customer).
+
+2. Routing
+Defines how URLs map to controllers/actions.
+
+Default route: /{controller}/{action}/{id}
+
+Example: /Home/Index/5 → HomeController.Index(int id = 5)
+
+3. Action Methods
+Controller methods that handle requests.
+
+Can return:
+
+View() → HTML page
+
+Json() → JSON data
+
+RedirectToAction() → Redirect to another action
+
+4. Model Binding
+Automatically maps HTTP request data (query string, form data, route values) to method parameters or model objects.
+
+Example:
+
+csharp
+public ActionResult Save(Student student)
+If form fields match Student properties, MVC binds them automatically.
+
+5. Dependency Injection (DI)
+Technique to achieve loose coupling.
+
+Instead of creating objects directly (new Service()), we inject them via constructors.
+
+ASP.NET Core MVC has built-in DI; classic MVC uses IoC containers like Unity, Autofac, Ninject.
+
+6. Filters
+Allow cross-cutting concerns (logging, authentication, caching).
+
+Types:
+
+Authorization filters
+
+Action filters
+
+Result filters
+
+Exception filters
+
+7. View Engine (Razor)
+Razor syntax: @Model.Name, @Html.TextBoxFor(m => m.Email)
+
+Combines C# with HTML.
+
+8. State Management
+HTTP is stateless, so we use:
+
+Session
+
+Cookies
+
+TempData
+
+ViewBag / ViewData
+
+9. Validation
+Data Annotations: [Required], [StringLength], [Range]
+
+Client-side + server-side validation.
+
+10. Security
+Authentication (Forms, Identity, OAuth).
+
+Authorization ([Authorize] attribute).
+
+Anti-forgery tokens (@Html.AntiForgeryToken()).
+
+🎯 25 ASP.NET MVC Interview Questions with Long Answers
+Here’s the interview-style Q&A with detailed explanations:
+
+1. What is ASP.NET MVC and why do we use it?
+ASP.NET MVC is a framework for building web applications using the Model-View-Controller pattern. It separates concerns:
+
+Model → Business logic & data
+
+View → UI
+
+Controller → Request handling
+
+This separation makes applications easier to test, maintain, and scale. Unlike Web Forms, MVC gives full control over HTML, JavaScript, and CSS, which is crucial for modern web development.
+
+2. Explain the MVC request lifecycle.
+Request enters via URL.
+
+Routing maps URL to controller/action.
+
+Controller executes action method.
+
+Model binding maps request data to parameters.
+
+Filters run (authorization, logging).
+
+Action result is generated (View, JSON, Redirect).
+
+View Engine (Razor) renders HTML.
+
+Response sent to client.
+
+3. What is Routing in MVC?
+Routing defines how URLs map to controllers/actions. Default route:
+
+csharp
+routes.MapRoute(
+  name: "Default",
+  url: "{controller}/{action}/{id}",
+  defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+);
+This means /Home/Index/5 → HomeController.Index(5).
+
+4. Explain Model Binding with an example.
+Model binding automatically maps form data to objects. Example:
+
+csharp
+public ActionResult Register(User user)
+If the form has fields Name, Email, Password, MVC binds them to User properties. This avoids manual parsing of Request.Form.
+
+5. What is Dependency Injection (DI) and why is it important?
+DI is a design pattern where dependencies are injected rather than created inside a class. Example:
+
+csharp
+public class HomeController {
+  private readonly IStudentService _service;
+  public HomeController(IStudentService service) {
+    _service = service;
+  }
+}
+Benefits:
+
+Loose coupling
+
+Easier testing (mocking services)
+
+Better maintainability
+
+6. Difference between ViewData, ViewBag, and TempData.
+ViewData → Dictionary, requires type casting.
+
+ViewBag → Dynamic wrapper around ViewData.
+
+TempData → Persists data across redirects (uses session).
+
+7. Explain Filters in MVC.
+Filters allow cross-cutting concerns:
+
+Authorization filter → Security checks
+
+Action filter → Pre/post processing
+
+Result filter → Modify result before rendering
+
+Exception filter → Handle errors globally
+
+8. What is Razor View Engine?
+Razor allows embedding C# in HTML using @. Example:
+
+html
+<p>Hello @Model.Name</p>
+It’s lightweight, fast, and prevents XSS by default.
+
+9. Explain Validation in MVC.
+Validation uses Data Annotations:
+
+csharp
+public class Student {
+  [Required]
+  public string Name { get; set; }
+}
+MVC automatically validates and shows errors in views using @Html.ValidationMessageFor.
+
+10. What is the difference between Partial View and Layout View?
+Partial View → Reusable UI snippet (like a widget).
+
+Layout View → Master page defining common structure (header, footer).
+
+11. Explain ActionResult types.
+ViewResult → Returns HTML
+
+JsonResult → Returns JSON
+
+RedirectResult → Redirects to URL
+
+FileResult → Returns file download
+
+12. What is the difference between ActionResult and JsonResult?
+ActionResult → Base class for all results.
+
+JsonResult → Specifically returns JSON data, useful for AJAX calls.
+
+13. Explain Authentication and Authorization in MVC.
+Authentication → Verifies identity (login).
+
+Authorization → Grants access based on roles/claims.
+Example:
+
+csharp
+[Authorize(Roles="Admin")]
+public ActionResult Dashboard() { }
+14. What is the difference between Session and TempData?
+Session → Stores data for entire user session.
+
+TempData → Stores data until it’s read (one request).
+
+15. Explain Bundling and Minification.
+Bundling → Combines multiple CSS/JS files into one.
+
+Minification → Removes whitespace/comments to reduce size.
+Improves performance.
+
+16. What is the difference between ASP.NET MVC and Web Forms?
+MVC → Separation of concerns, full control over HTML, testable.
+
+Web Forms → Event-driven, uses ViewState, less control over HTML.
+
+17. Explain Areas in MVC.
+Areas allow modularization of large applications. Each area has its own controllers, views, and routes. Example: Admin, User.
+
+18. What is the difference between Strongly Typed View and Weakly Typed View?
+Strongly Typed View → Uses @model directive, compile-time checking.
+
+Weakly Typed View → Uses ViewBag/ViewData, runtime errors possible.
+
+19. Explain Exception Handling in MVC.
+Use try-catch in controllers.
+
+Global handling via HandleErrorAttribute.
+
+Custom error pages via web.config.
+
+20. What is the difference between Html.RenderPartial and Html.Partial?
+Html.Partial → Returns HTML string.
+
+Html.RenderPartial → Writes directly to response stream (better performance).
+
+21. Explain Dependency Injection in ASP.NET Core MVC.
+ASP.NET Core has built-in DI. Services are registered in Startup.cs:
+
+csharp
+services.AddScoped<IStudentService, StudentService>();
+Injected via constructor.
+
+22. What is Model Validation in MVC?
+Model validation ensures data integrity. Example:
+
+csharp
+[Range(18, 60)]
+public int Age { get; set; }
+MVC validates automatically before saving.
