@@ -1,0 +1,697 @@
+.NET Blazor - Complete Summary (Interview Notes)
+What is Blazor?
+
+Blazor is Microsoft's modern UI framework for building interactive web applications using C# instead of JavaScript.
+
+Earlier:
+
+Frontend -> HTML + CSS + JavaScript
+Backend -> C#
+
+With Blazor:
+
+Frontend -> C#
+Backend -> C#
+
+Everything can be written using .NET.
+
+Blazor is built on top of ASP.NET Core.
+
+Why Microsoft Created Blazor?
+
+Before Blazor,
+
+Developers needed
+
+HTML
+CSS
+JavaScript
+React / Angular / Vue
+ASP.NET Core API
+
+Too many technologies.
+
+Microsoft wanted developers to build complete applications using one language.
+
+That language is
+
+C#
+
+Blazor Architecture
+Browser
+     │
+     │
+ Razor Components
+     │
+     │
+Business Logic (C#)
+     │
+     │
+Dependency Injection
+     │
+     │
+Entity Framework Core
+     │
+     │
+SQL Server
+What is a Razor Component?
+
+A Razor Component is a combination of
+
+HTML
+
++
+
+C#
+
++
+
+Razor Syntax
+
+Extension
+
+.razor
+
+Example
+
+<h3>Hello</h3>
+
+@code{
+
+}
+
+Everything inside
+
+@code
+
+is C#.
+
+Types of Blazor Hosting Models
+1. Blazor Server
+
+Browser
+
+↓
+
+SignalR
+
+↓
+
+Server
+
+↓
+
+Database
+
+Entire application runs on the server.
+
+Advantages
+
+Small download
+High security
+Easy deployment
+
+Disadvantages
+
+Internet required
+Latency
+2. Blazor WebAssembly
+
+Entire application is downloaded to browser.
+
+Browser
+
+↓
+
+Runs .NET Runtime
+
+↓
+
+Application
+
+↓
+
+API
+
+↓
+
+Database
+
+Advantages
+
+Offline support
+Fast UI
+Less server load
+
+Disadvantages
+
+Large initial download
+3. Blazor Hybrid
+
+Desktop application
+
+Uses
+
+WPF
+WinForms
+MAUI
+
+with Blazor UI.
+
+Razor Syntax
+
+Variables
+
+@name
+
+Condition
+
+@if(age>18)
+{
+
+}
+
+Loop
+
+@foreach(var emp in employees)
+{
+
+}
+
+Functions
+
+@code{
+
+void Save()
+{
+
+}
+
+}
+Component
+
+Everything in Blazor is a Component.
+
+Example
+
+Navbar
+
+Sidebar
+
+Dashboard
+
+Employee List
+
+Employee Card
+
+Footer
+
+Every one is a component.
+
+Reusable.
+
+Component Lifecycle
+
+Most asked.
+
+Methods
+
+OnInitialized()
+
+OnInitializedAsync()
+
+OnParametersSet()
+
+OnAfterRender()
+
+Dispose()
+
+Example
+
+Page Opens
+
+↓
+
+OnInitialized()
+
+↓
+
+Data Loaded
+
+↓
+
+Page Rendered
+
+↓
+
+OnAfterRender()
+
+↓
+
+User Leaves
+
+↓
+
+Dispose()
+Dependency Injection
+
+Blazor uses built-in DI.
+
+Register
+
+builder.Services.AddScoped<EmployeeService>();
+
+Inject
+
+@inject EmployeeService service
+Routing
+
+Navigation
+
+@page "/employee"
+
+Navigate
+
+NavigationManager.NavigateTo("/home");
+Parameters
+
+Parent
+
+<EmployeeCard Name="John"/>
+
+Child
+
+[Parameter]
+
+public string Name {get;set;}
+Cascading Parameters
+
+Pass data to many components without manually passing every time.
+
+Example
+
+Theme
+
+Logged User
+
+Language
+
+Permissions
+
+Event Handling
+<button @onclick="Save">
+
+Method
+
+void Save()
+{
+
+}
+Two-way Binding
+<input @bind="Name"/>
+
+Automatically
+
+Read
+
+Update
+
+Display
+
+Forms
+
+Blazor uses
+
+EditForm
+
+Example
+
+<EditForm Model="employee">
+
+</EditForm>
+
+Validation
+
+DataAnnotations
+
+Required
+
+Range
+
+EmailAddress
+
+Compare
+
+RegularExpression
+Authentication
+
+Blazor supports
+
+JWT
+Identity
+Azure AD
+OAuth
+OpenID Connect
+State Management
+
+Options
+
+Local Variable
+
+↓
+
+Scoped Service
+
+↓
+
+Session Storage
+
+↓
+
+Local Storage
+
+↓
+
+Protected Browser Storage
+
+↓
+
+Database
+
+Entity Framework Core
+
+Blazor usually communicates with EF Core.
+
+Flow
+
+UI
+
+↓
+
+Repository
+
+↓
+
+DbContext
+
+↓
+
+SQL Server
+Repository Pattern
+UI
+
+↓
+
+Service
+
+↓
+
+Repository
+
+↓
+
+EF Core
+
+↓
+
+Database
+
+Separates business logic.
+
+API Integration
+
+Blazor calls
+
+ASP.NET Core Web API
+
+using
+
+HttpClient
+
+Example
+
+await http.GetFromJsonAsync<Employee>();
+SignalR
+
+Real-time communication.
+
+Examples
+
+Chat
+
+Notification
+
+Live Dashboard
+
+Stock Market
+
+Attendance
+
+Authentication Flow
+Login
+
+↓
+
+JWT Generated
+
+↓
+
+Browser Stores Token
+
+↓
+
+API Call
+
+↓
+
+Token Verified
+
+↓
+
+Response
+Rendering Modes (.NET 8+)
+
+Very important.
+
+Interactive Server
+
+Interactive WebAssembly
+
+Interactive Auto
+
+Static SSR
+
+These are frequently discussed in modern Blazor interviews.
+
+Performance Optimization
+
+Use
+
+Virtualize
+
+Lazy Loading
+
+Caching
+
+Asynchronous Calls
+
+Pagination
+
+Memoization
+
+Proper DI Lifetime
+
+Avoid unnecessary rendering
+
+Security
+
+Use
+
+HTTPS
+
+JWT
+
+Authentication
+
+Authorization
+
+XSS Protection
+
+CSRF Protection
+
+Input Validation
+
+Role Based Authorization
+
+Difference
+
+MVC
+
+↓
+
+Controller returns View
+
+Blazor
+
+↓
+
+Component renders UI
+
+Folder Structure
+Components
+
+Pages
+
+Layouts
+
+Models
+
+Services
+
+wwwroot
+
+Program.cs
+
+appsettings.json
+Advantages
+
+Reusable Components
+
+Full C#
+
+Strong Typing
+
+Easy Maintenance
+
+Shared Models
+
+High Productivity
+
+Excellent Microsoft Support
+
+Current Market Trend (2026)
+
+Companies are increasingly using Blazor with ASP.NET Core, Minimal APIs, Entity Framework Core, Azure, Docker, Kubernetes, Redis, SignalR, and Clean Architecture for internal business applications, dashboards, HRMS, ERP, CRM, healthcare, and finance systems. Candidates are expected to know not only Blazor components but also API design, authentication, dependency injection, cloud deployment, and performance tuning.
+
+25 Advanced Blazor Interview Questions & Answers
+1. What is Blazor, and how does it differ from ASP.NET MVC?
+
+Answer: Blazor is a component-based UI framework built on ASP.NET Core that lets developers create interactive web applications using C#. MVC follows the Model-View-Controller pattern where controllers return views after HTTP requests. Blazor keeps UI state in components and updates only changed parts of the page without requiring a full page refresh, providing a more SPA-like experience.
+
+2. Explain the difference between Blazor Server and Blazor WebAssembly.
+
+Answer: Blazor Server executes application logic on the server and synchronizes UI changes through SignalR. It has a small download size but requires a constant connection. Blazor WebAssembly downloads the .NET runtime and application into the browser, runs locally, and communicates with APIs. It reduces server load but has a larger initial download.
+
+3. What is a Razor Component?
+
+Answer: A Razor Component is a reusable UI building block with a .razor extension that combines HTML markup, Razor syntax, and C# logic. Components encapsulate behavior, UI, parameters, and lifecycle methods.
+
+4. Explain the Blazor component lifecycle.
+
+Answer: Key lifecycle methods include OnInitialized(), OnInitializedAsync(), OnParametersSet(), OnAfterRender(), and Dispose(). They are used for initialization, loading data, reacting to parameter changes, performing post-render operations, and releasing resources.
+
+5. What is dependency injection in Blazor?
+
+Answer: Dependency Injection (DI) is the built-in mechanism for supplying services to components. Services are registered in Program.cs using lifetimes such as Singleton, Scoped, or Transient, and injected with @inject or constructor injection.
+
+6. Explain Singleton, Scoped, and Transient services.
+
+Answer: Singleton creates one instance for the application's lifetime. Scoped creates one instance per user session (or request, depending on hosting model). Transient creates a new instance every time it is requested.
+
+7. What is the purpose of @bind?
+
+Answer: @bind provides two-way data binding, automatically synchronizing values between UI elements and C# properties without manually handling change events.
+
+8. How do you pass data between components?
+
+Answer: Data can be passed using [Parameter], EventCallback, CascadingParameter, or shared state services, depending on the relationship between components.
+
+9. What are Cascading Parameters?
+
+Answer: Cascading Parameters allow data such as themes, user information, or culture settings to be shared across many nested components without explicitly passing parameters through each level.
+
+10. What is EventCallback, and why is it preferred?
+
+Answer: EventCallback is the recommended way for child components to notify parent components about events. It supports asynchronous execution and integrates with Blazor's rendering system.
+
+11. How does routing work in Blazor?
+
+Answer: Routing is defined with the @page directive. The Router component maps URLs to components, and NavigationManager is used for programmatic navigation.
+
+12. Explain EditForm and validation.
+
+Answer: EditForm binds a model to a form and integrates with DataAnnotations validation using components like DataAnnotationsValidator and ValidationSummary.
+
+13. How do you call a Web API from Blazor?
+
+Answer: Inject HttpClient and use methods such as GetFromJsonAsync, PostAsJsonAsync, PutAsJsonAsync, and DeleteAsync to communicate with REST APIs.
+
+14. Why is asynchronous programming important in Blazor?
+
+Answer: Asynchronous programming keeps the UI responsive while waiting for I/O operations like database or API calls, improving scalability and user experience.
+
+15. How does authentication work in Blazor?
+
+Answer: Authentication typically uses ASP.NET Core Identity, JWT Bearer tokens, or OpenID Connect. Authorization is implemented using [Authorize] attributes, AuthorizeView, and role or policy-based authorization.
+
+16. What is SignalR, and where is it used?
+
+Answer: SignalR enables real-time communication between clients and the server. Common use cases include chat applications, notifications, dashboards, collaborative editing, and live monitoring.
+
+17. Explain state management in Blazor.
+
+Answer: State can be maintained within components, shared services, browser storage (local or session storage), or persisted in a database, depending on the application's requirements.
+
+18. What is prerendering?
+
+Answer: Prerendering generates the initial HTML on the server before the interactive Blazor application starts. It improves SEO and reduces perceived page load time.
+
+19. How do you optimize Blazor performance?
+
+Answer: Optimize by using Virtualize, lazy loading, pagination, asynchronous APIs, minimizing unnecessary renders, caching data, and choosing the appropriate rendering mode.
+
+20. What are render modes introduced in .NET 8?
+
+Answer: .NET 8 introduced Static Server-Side Rendering (SSR), Interactive Server, Interactive WebAssembly, and Interactive Auto, allowing developers to mix rendering strategies for better performance and flexibility.
+
+21. How would you structure a production Blazor application?
+
+Answer: A common architecture separates Components, Pages, Services, Models, Data Access, and API layers. Many teams adopt Clean Architecture with dependency inversion, repositories, CQRS, and MediatR for maintainability.
+
+22. What are common security practices in Blazor?
+
+Answer: Use HTTPS, authenticate users, authorize access with roles or policies, validate input, protect APIs with JWT or cookies, avoid exposing sensitive data on the client, and follow OWASP recommendations.
+
+23. What challenges can arise in Blazor Server?
+
+Answer: Because the UI depends on a SignalR connection, network interruptions can affect responsiveness. Long-running synchronous operations can also block user interactions, so asynchronous programming and proper connection handling are essential.
+
+24. When would you choose Blazor over React or Angular?
+
+Answer: Blazor is a strong choice when the team primarily uses C#, wants shared models and validation between client and server, and is building enterprise applications within the Microsoft ecosystem. React and Angular remain strong options for teams centered on the JavaScript ecosystem.
+
+25. Describe a complete enterprise Blazor application flow.
+
+Answer: A user logs in through an authentication provider, receives an authenticated session or token, navigates through Blazor components, which call backend services via dependency injection. These services communicate with ASP.NET Core Web APIs, which use Entity Framework Core or other data-access technologies to interact with SQL Server. Business logic is centralized in service or domain layers, and the UI updates automatically based on state changes. Features such as SignalR, logging, caching, and role-based authorization are integrated to support scalability, performance, and security.
+
+Most Expected Topics for .NET + Blazor Interviews in 2026
+Blazor (.NET 8/9)
+ASP.NET Core Web API
+Entity Framework Core
+LINQ
+Dependency Injection
+Middleware
+Authentication & Authorization (JWT/OAuth/OpenID Connect)
+SignalR
+Clean Architecture
+Repository & Unit of Work
+Minimal APIs
+Azure App Service & Azure SQL
+Docker & Kubernetes basics
+Redis caching
+Logging (Serilog)
+Unit Testing (xUnit/NUnit)
+Git & CI/CD (GitHub Actions/Azure DevOps)
+Performance optimization
+Microservices fundamentals
+SQL Server optimization and indexing
