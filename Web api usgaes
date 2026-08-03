@@ -1,0 +1,306 @@
+Web API Summary (Interview Revision)
+What is a Web API?
+
+A Web API (Application Programming Interface) is a service that allows different applications to communicate over HTTP.
+
+It acts as a middle layer between the client and the database.
+
+Architecture:
+
+Client (MVC / React / Angular / Windows Forms / Mobile)
+                    |
+                 HTTP Request
+                    |
+                 Web API
+                    |
+             Business Logic
+                    |
+                 Database
+Why do we use Web API?
+Share data between multiple applications.
+Separate UI from business logic.
+Improve security.
+Return data in JSON or XML.
+Support CRUD operations.
+Enable communication through HTTP.
+HTTP Methods
+Method	Purpose
+GET	Retrieve data
+POST	Insert new data
+PUT	Update existing data
+DELETE	Delete data
+PATCH	Partial update
+
+Example:
+
+GET /api/employees
+
+Returns all employees.
+
+Common Response Formats
+JSON (Most Common)
+XML
+
+Example JSON:
+
+{
+  "id":1,
+  "name":"John",
+  "salary":50000
+}
+MVC vs Web API
+MVC
+
+Returns:
+
+HTML Views
+Browser
+   |
+MVC Controller
+   |
+Database
+
+Used for websites.
+
+Web API
+
+Returns:
+
+JSON
+XML
+React
+Angular
+Mobile
+Windows Forms
+MVC
+      |
+   Web API
+      |
+Database
+
+Used for data sharing.
+
+Request Flow
+Client
+   |
+HTTP Request
+   |
+Web API Controller
+   |
+Service Layer
+   |
+Repository
+   |
+Database
+   |
+JSON Response
+Advantages
+Secure
+Reusable
+Platform Independent
+Easy Integration
+Centralized Business Logic
+Easy Maintenance
+Scalable
+Authentication
+
+Common methods:
+
+JWT Token
+OAuth
+API Key
+Basic Authentication
+HTTP Status Codes
+Code	Meaning
+200	Success
+201	Created
+204	No Content
+400	Bad Request
+401	Unauthorized
+403	Forbidden
+404	Not Found
+500	Internal Server Error
+CRUD Example
+
+Create
+
+POST /api/employees
+
+Read
+
+GET /api/employees
+
+Update
+
+PUT /api/employees/5
+
+Delete
+
+DELETE /api/employees/5
+Top 20 Web API Interview Questions & Answers
+1. What is a Web API?
+
+Answer:
+A Web API is an interface that enables applications to communicate over HTTP. It exposes data and services to clients in formats such as JSON or XML.
+
+2. Why do we use Web API?
+
+Answer:
+To share data securely between multiple applications, centralize business logic, and allow clients such as web, mobile, and desktop applications to access the same backend.
+
+3. What is the difference between MVC and Web API?
+
+Answer:
+
+MVC returns HTML views for browsers.
+
+Web API returns JSON/XML for any client.
+
+4. What are HTTP methods?
+
+Answer:
+
+GET → Retrieve data
+POST → Create data
+PUT → Update entire resource
+PATCH → Update part of a resource
+DELETE → Remove data
+5. What is REST?
+
+Answer:
+REST (Representational State Transfer) is an architectural style for designing web services that use HTTP methods and stateless communication.
+
+6. What is RESTful API?
+
+Answer:
+A RESTful API follows REST principles such as using HTTP methods, resource-based URLs, stateless requests, and standard response codes.
+
+7. What is JSON?
+
+Answer:
+JSON (JavaScript Object Notation) is a lightweight data format used to exchange data between a client and a server.
+
+Example:
+
+{
+"name":"John",
+"age":25
+}
+8. Why is JSON preferred over XML?
+
+Answer:
+
+Smaller size
+Faster parsing
+Easier to read
+Better performance
+Native support in JavaScript
+9. What is a Controller in Web API?
+
+Answer:
+A controller receives HTTP requests, processes them, interacts with business logic or the database, and returns responses.
+
+10. What is an Endpoint?
+
+Answer:
+An endpoint is the URL used to access an API.
+
+Example:
+
+GET /api/employees
+11. What is Stateless Communication?
+
+Answer:
+Each API request contains all the information needed to process it. The server does not store client session information between requests.
+
+12. What is Authentication?
+
+Answer:
+Authentication verifies the identity of a user or application.
+
+Examples:
+
+JWT
+OAuth
+API Key
+13. What is Authorization?
+
+Answer:
+Authorization determines what an authenticated user is allowed to do.
+
+Example:
+Only an admin can delete employee records.
+
+14. Difference between Authentication and Authorization?
+
+Answer:
+
+Authentication = Who are you?
+
+Authorization = What can you access?
+
+15. What are HTTP Status Codes?
+
+Answer:
+
+200 → OK
+
+201 → Created
+
+400 → Bad Request
+
+401 → Unauthorized
+
+404 → Not Found
+
+500 → Internal Server Error
+
+16. Why shouldn't a client connect directly to the database?
+
+Answer:
+
+Security risk
+Database credentials exposed
+Business logic duplicated
+Hard to maintain
+Difficult to support multiple clients
+17. What is CRUD?
+
+Answer:
+
+Create
+
+Read
+
+Update
+
+Delete
+
+These are the basic operations performed on data.
+
+18. How does a Web API work?
+
+Answer:
+
+Client sends an HTTP request.
+The API controller receives the request.
+Business logic is executed.
+The database is accessed if needed.
+The API returns a JSON response.
+19. Can multiple applications use the same Web API?
+
+Answer:
+Yes. A single Web API can be consumed by MVC applications, React, Angular, mobile apps, Windows Forms, and third-party systems.
+
+20. What are the advantages of Web API?
+
+Answer:
+
+Platform independent
+Reusable
+Secure
+Scalable
+Easy integration
+Supports multiple clients
+Centralized business logic
+Easier maintenance
