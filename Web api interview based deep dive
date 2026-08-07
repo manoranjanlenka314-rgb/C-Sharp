@@ -1,0 +1,907 @@
+🔥 25 Web API Interview-Based Q&A — ASP.NET MVC
+1. What is Web API?
+
+Answer:
+
+ASP.NET Web API is a framework used to build HTTP-based services that allow different applications to communicate with each other.
+
+For example:
+
+React / Angular / Mobile App
+          ↓
+       HTTP Request
+          ↓
+      ASP.NET Web API
+          ↓
+       Repository
+          ↓
+       Database
+
+The client can send requests such as:
+
+GET    /api/employees
+POST   /api/employees
+PUT    /api/employees/10
+DELETE /api/employees/10
+
+The API generally returns data in JSON format.
+
+2. What is the difference between MVC and Web API?
+
+Answer:
+
+The main difference is their purpose.
+
+MVC	Web API
+Mainly used to build web applications	Mainly used to build HTTP services/APIs
+Returns Views	Usually returns JSON/XML
+Uses Controllers + Views	Uses API Controllers
+Browser-oriented	Client/application-oriented
+Controller	ApiController
+
+Example MVC:
+
+public ActionResult Index()
+{
+    return View();
+}
+
+Web API:
+
+public IHttpActionResult GetEmployees()
+{
+    return Ok(employees);
+}
+
+So:
+
+MVC → UI
+Web API → Data/Services
+3. What is ApiController?
+
+Answer:
+
+ApiController is the base class used for creating ASP.NET Web API controllers.
+
+Example:
+
+public class EmployeeController : ApiController
+{
+    public IHttpActionResult GetEmployees()
+    {
+        return Ok();
+    }
+}
+
+It provides functionality specifically designed for HTTP APIs.
+
+For example:
+
+HTTP status codes
+Content negotiation
+Request handling
+Routing
+JSON/XML responses
+4. What is the difference between Controller and ApiController?
+
+Answer:
+
+MVC controller:
+
+public class EmployeeController : Controller
+{
+    public ActionResult Index()
+    {
+        return View();
+    }
+}
+
+API controller:
+
+public class EmployeeController : ApiController
+{
+    public IHttpActionResult Get()
+    {
+        return Ok();
+    }
+}
+
+Controller is normally used when returning HTML Views.
+
+ApiController is used when returning HTTP data, usually JSON.
+
+5. What are HTTP methods in Web API?
+
+Answer:
+
+The major HTTP methods are:
+
+Method	Purpose
+GET	Retrieve data
+POST	Create data
+PUT	Update/replace data
+PATCH	Partially update data
+DELETE	Delete data
+
+For example:
+
+GET /api/employees
+
+gets employees.
+
+POST /api/employees
+
+creates an employee.
+
+PUT /api/employees/5
+
+updates employee 5.
+
+DELETE /api/employees/5
+
+deletes employee 5.
+
+6. What is REST API?
+
+Answer:
+
+REST stands for Representational State Transfer.
+
+A REST API uses HTTP methods and resources to communicate.
+
+For example:
+
+/api/employees
+
+represents the employee resource.
+
+Then:
+
+GET /api/employees
+
+gets all employees.
+
+GET /api/employees/5
+
+gets employee 5.
+
+POST /api/employees
+
+creates an employee.
+
+DELETE /api/employees/5
+
+deletes employee 5.
+
+A good REST API is generally:
+
+Stateless
+Resource-oriented
+HTTP-based
+Uses appropriate HTTP methods
+Uses HTTP status codes
+7. What does stateless mean in REST?
+
+Answer:
+
+Stateless means that the server doesn't depend on information stored from a previous request to understand the current request.
+
+For example:
+
+GET /api/employees/10
+Authorization: Bearer token
+
+The request contains everything required to authenticate and process it.
+
+The server doesn't have to remember:
+
+"This user made a request 5 minutes ago, so I'll assume they are authenticated."
+
+Each request should contain the necessary information.
+
+8. What is routing in Web API?
+
+Answer:
+
+Routing determines which controller/action should handle an incoming HTTP request.
+
+For example:
+
+GET /api/employees/10
+
+could be mapped to:
+
+public IHttpActionResult GetEmployee(int id)
+{
+    ...
+}
+
+In Web API 2, routing can be configured using conventional routing:
+
+config.Routes.MapHttpRoute(
+    name: "DefaultApi",
+    routeTemplate: "api/{controller}/{id}",
+    defaults: new { id = RouteParameter.Optional }
+);
+
+Or attribute routing:
+
+[Route("api/employees/{id}")]
+public IHttpActionResult GetEmployee(int id)
+{
+    ...
+}
+9. What is attribute routing?
+
+Answer:
+
+Attribute routing allows us to define the URL directly above the API action.
+
+Example:
+
+[Route("api/employees/{id}")]
+[HttpGet]
+public IHttpActionResult GetEmployee(int id)
+{
+    ...
+}
+
+Request:
+
+GET /api/employees/10
+
+will call this method.
+
+Usually we enable it in Web API configuration:
+
+config.MapHttpAttributeRoutes();
+10. What is IHttpActionResult?
+
+Answer:
+
+IHttpActionResult represents the HTTP response returned by a Web API action.
+
+For example:
+
+public IHttpActionResult GetEmployee(int id)
+{
+    var employee = repository.GetById(id);
+
+    if (employee == null)
+        return NotFound();
+
+    return Ok(employee);
+}
+
+Here:
+
+Ok(employee)
+
+returns HTTP 200.
+
+NotFound()
+
+returns HTTP 404.
+
+This makes the API code cleaner than manually creating every response.
+
+11. What are HTTP status codes and why are they important?
+
+Answer:
+
+HTTP status codes tell the client what happened.
+
+Common ones are:
+
+200 → OK
+201 → Created
+204 → No Content
+400 → Bad Request
+401 → Unauthorized
+403 → Forbidden
+404 → Not Found
+500 → Internal Server Error
+
+For example:
+
+return Ok(employee);
+
+means:
+
+200 OK
+
+And:
+
+return NotFound();
+
+means:
+
+404 Not Found
+
+An interviewer may ask:
+
+Why shouldn't every API return HTTP 200?
+
+Because the client needs to know whether the operation actually succeeded or failed.
+
+12. What is the difference between 401 and 403?
+
+Answer:
+
+This is a very common interview question.
+
+401 — Unauthorized
+
+The user has not been properly authenticated.
+
+Example:
+
+No valid authentication token
+403 — Forbidden
+
+The user is authenticated but doesn't have permission.
+
+Example:
+
+User is logged in
+BUT
+User doesn't have Admin permission
+
+Think:
+
+401 → Who are you?
+403 → I know who you are, but you can't do this.
+13. What is the difference between POST and PUT?
+
+Answer:
+
+POST is generally used to create a new resource.
+
+POST /api/employees
+
+For example:
+
+{
+    "name": "John",
+    "email": "john@test.com"
+}
+
+PUT is generally used to update/replace an existing resource.
+
+PUT /api/employees/10
+
+with:
+
+{
+    "name": "John Updated",
+    "email": "johnnew@test.com"
+}
+
+Simple way to remember:
+
+POST → Create
+PUT → Update/replace
+14. What is PATCH?
+
+Answer:
+
+PATCH is used when you want to update part of a resource.
+
+Suppose employee has:
+
+{
+    "name": "John",
+    "email": "john@test.com",
+    "department": "IT"
+}
+
+If you only want to change the department:
+
+PATCH /api/employees/10
+
+you might send only:
+
+{
+    "department": "HR"
+}
+
+So:
+
+PUT   → generally complete replacement
+PATCH → partial modification
+15. How do you receive JSON data in Web API?
+
+Answer:
+
+Suppose the client sends:
+
+{
+    "name": "John",
+    "email": "john@test.com"
+}
+
+We can create a model:
+
+public class Employee
+{
+    public int EmployeeId { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+}
+
+Then:
+
+[HttpPost]
+public IHttpActionResult CreateEmployee(Employee employee)
+{
+    repository.Insert(employee);
+
+    return Ok(employee);
+}
+
+Web API's model binding/deserialization converts the incoming JSON into the Employee object.
+
+16. What is model binding?
+
+Answer:
+
+Model binding converts incoming HTTP request data into C# objects/parameters.
+
+For example:
+
+{
+    "name": "John",
+    "email": "john@test.com"
+}
+
+can become:
+
+Employee employee
+
+inside:
+
+public IHttpActionResult Create(Employee employee)
+
+So instead of manually reading every JSON property, Web API does the mapping for us.
+
+17. What is content negotiation?
+
+Answer:
+
+Content negotiation determines what format the API should return based on the client's request and available formatters.
+
+For example, a client can request:
+
+Accept: application/json
+
+and the API can return:
+
+{
+    "id": 10,
+    "name": "John"
+}
+
+Web API can support formats such as:
+
+JSON
+XML
+
+In modern applications, JSON is by far the most common.
+
+18. What is CORS?
+
+Answer:
+
+CORS means:
+
+Cross-Origin Resource Sharing.
+
+Suppose your frontend is running at:
+
+http://localhost:3000
+
+and your Web API is running at:
+
+http://localhost:5000
+
+These are different origins.
+
+The browser may block the frontend from calling the API unless the API allows that origin through CORS.
+
+For example:
+
+React
+localhost:3000
+      ↓
+      ↓ API request
+      ↓
+ASP.NET Web API
+localhost:5000
+
+CORS controls whether that cross-origin request is allowed.
+
+This is especially important when you're integrating React + ASP.NET Web API.
+
+19. How do you handle exceptions in Web API?
+
+Answer:
+
+We should not expose raw exceptions to clients.
+
+For example, instead of:
+
+try
+{
+    ...
+}
+catch(Exception ex)
+{
+    return InternalServerError(ex);
+}
+
+for every action, larger applications can use centralized exception handling/logging.
+
+For a simple API:
+
+try
+{
+    var employee = repository.GetById(id);
+
+    return Ok(employee);
+}
+catch(Exception ex)
+{
+    // Log exception
+    return InternalServerError();
+}
+
+The important point is:
+
+Log the actual exception internally, but don't expose sensitive server/database details to the client.
+
+20. What is dependency injection in Web API?
+
+Answer:
+
+Dependency Injection means that a controller receives the dependencies it needs instead of creating them itself.
+
+Bad:
+
+public EmployeeController()
+{
+    repository = new EmployeeRepository();
+}
+
+Better:
+
+private readonly IEmployeeRepository _repository;
+
+public EmployeeController(IEmployeeRepository repository)
+{
+    _repository = repository;
+}
+
+Then Unity can register:
+
+container.RegisterType<IEmployeeRepository, EmployeeRepository>();
+
+This is actually very relevant to your MVC project because you've worked with Unity DI + repositories.
+
+The flow becomes:
+
+API Controller
+      ↓
+IEmployeeRepository
+      ↓
+EmployeeRepository
+      ↓
+DbContext
+      ↓
+Database
+21. What is the purpose of a repository in Web API?
+
+Answer:
+
+A repository separates database access logic from the controller.
+
+Instead of doing everything inside the controller:
+
+public IHttpActionResult GetEmployees()
+{
+    // SQL/database logic
+    // filtering
+    // inserting
+    // updating
+}
+
+we can have:
+
+public IHttpActionResult GetEmployees()
+{
+    var employees = _employeeRepository.GetAll();
+
+    return Ok(employees);
+}
+
+The repository handles data access.
+
+This creates separation of concerns:
+
+Controller
+   ↓
+Repository
+   ↓
+Data Access
+   ↓
+Database
+22. How would you create a CRUD Web API?
+
+Answer:
+
+A basic CRUD API could look like this:
+
+public class EmployeeController : ApiController
+{
+    [HttpGet]
+    public IHttpActionResult GetEmployees()
+    {
+        var employees = repository.GetAll();
+
+        return Ok(employees);
+    }
+
+    [HttpGet]
+    public IHttpActionResult GetEmployee(int id)
+    {
+        var employee = repository.GetByID(id);
+
+        if (employee == null)
+            return NotFound();
+
+        return Ok(employee);
+    }
+
+    [HttpPost]
+    public IHttpActionResult Create(Employee employee)
+    {
+        repository.Insert(employee);
+
+        return Ok(employee);
+    }
+
+    [HttpPut]
+    public IHttpActionResult Update(int id, Employee employee)
+    {
+        repository.Update(employee);
+
+        return Ok(employee);
+    }
+
+    [HttpDelete]
+    public IHttpActionResult Delete(int id)
+    {
+        repository.Delete(id);
+
+        return Ok();
+    }
+}
+
+This provides:
+
+GET     → Read
+POST    → Create
+PUT     → Update
+DELETE  → Delete
+23. Interview Scenario: Your API returns 500. How would you debug it?
+
+Answer:
+
+I wouldn't immediately assume the API code is wrong.
+
+I'd debug systematically:
+
+Step 1 — Check the request
+URL
+HTTP method
+Request body
+Headers
+Step 2 — Check controller
+
+Put a breakpoint inside the API action.
+
+public IHttpActionResult Create(Employee employee)
+{
+    // breakpoint here
+}
+Step 3 — Check model binding
+
+Check:
+
+employee
+ModelState
+Step 4 — Check repository
+_repository.Insert(employee);
+Step 5 — Check database
+
+Look for:
+
+Invalid column
+Constraint violation
+NULL value
+Foreign key violation
+Connection problem
+Step 6 — Check server logs
+
+Look at the actual exception and stack trace.
+
+A good interview answer is:
+
+"I would trace the request from the client to the controller, then model binding, repository, database, and finally inspect the server-side exception/logs."
+
+24. Interview Scenario: Your API is returning too much database data. What would you do?
+
+Answer:
+
+I wouldn't directly expose the database entity everywhere.
+
+Instead, I would use a DTO — Data Transfer Object.
+
+Suppose our database entity contains:
+
+public class Employee
+{
+    public int EmployeeId { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string Password { get; set; }
+}
+
+We should not return the password.
+
+Create:
+
+public class EmployeeDto
+{
+    public int EmployeeId { get; set; }
+    public string Name { get; set; }
+    public string Email { get; set; }
+}
+
+Then:
+
+[HttpGet]
+public IHttpActionResult GetEmployee(int id)
+{
+    var employee = repository.GetByID(id);
+
+    var dto = new EmployeeDto
+    {
+        EmployeeId = employee.EmployeeId,
+        Name = employee.Name,
+        Email = employee.Email
+    };
+
+    return Ok(dto);
+}
+
+This provides better:
+
+Security
+Control over response
+Separation between API and database models
+Maintainability
+25. 🔥 Interview Scenario: React calls your ASP.NET Web API but gets 404. What would you check?
+
+Answer:
+
+I'd check the following in order.
+
+1. URL
+
+For example:
+
+axios.get("https://localhost:44300/api/employees")
+
+Make sure the URL matches the API route.
+
+2. Controller
+
+Make sure the API controller exists:
+
+public class EmployeeController : ApiController
+3. Routing
+
+Check:
+
+config.MapHttpAttributeRoutes();
+
+or the conventional route:
+
+config.Routes.MapHttpRoute(
+    name: "DefaultApi",
+    routeTemplate: "api/{controller}/{id}",
+    defaults: new { id = RouteParameter.Optional }
+);
+4. HTTP method
+
+If the API expects:
+
+[HttpGet]
+
+the React application should send:
+
+GET
+
+not POST.
+
+5. Browser Network tab
+
+I'd inspect:
+
+Request URL
+Request Method
+Status Code
+Response
+6. Test API separately
+
+I'd test the API using Postman or Swagger if available.
+
+If Postman works but React doesn't, the issue is likely in:
+
+React URL
+CORS
+Headers
+Request format
+🧠 The 25 Questions You Should Really Remember
+
+If you're preparing for an interview, memorize this mental map:
+
+                    WEB API
+                       │
+          ┌────────────┴────────────┐
+          ↓                         ↓
+      HTTP Methods                Routing
+          │                         │
+    ┌─────┼──────┐             /api/employees
+    ↓     ↓      ↓
+   GET   POST    PUT
+    │     │       │
+   Read Create   Update
+                │
+              DELETE
+                ↓
+              Delete
+
+                       ↓
+                 ApiController
+                       ↓
+                 Model Binding
+                       ↓
+                    DTO
+                       ↓
+                Repository
+                       ↓
+                  DbContext
+                       ↓
+                   Database
+
+And the most important interview distinction:
+
+ASP.NET MVC
+      ↓
+Controller
+      ↓
+View
+      ↓
+HTML/UI
+
+
+ASP.NET Web API
+      ↓
+ApiController
+      ↓
+HTTP Response
+      ↓
+JSON/XML
+      ↓
+React / Angular / Mobile / Other Client
