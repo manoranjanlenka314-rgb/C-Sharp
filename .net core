@@ -1,0 +1,1220 @@
+1. What is ASP.NET Core, and how is it different from ASP.NET MVC?
+
+Answer:
+
+ASP.NET Core is a cross-platform, high-performance framework developed by Microsoft for building modern web applications, REST APIs, microservices, and web services.
+
+Unlike the older ASP.NET MVC Framework, ASP.NET Core can run on:
+
+Windows
+Linux
+macOS
+
+It is also designed around middleware, dependency injection, configuration, and built-in logging.
+
+For example, a basic ASP.NET Core application starts from Program.cs:
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllersWithViews();
+
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();
+
+In traditional ASP.NET MVC, we commonly worked with files such as:
+
+Global.asax
+Web.config
+RouteConfig.cs
+Startup.cs
+
+In modern ASP.NET Core, much of this configuration is centralized in Program.cs.
+
+Interview point:
+ASP.NET Core is not simply a newer version of ASP.NET MVC. It is a redesigned, cross-platform framework with a middleware-based architecture and built-in dependency injection.
+
+2. What is Dependency Injection in .NET Core?
+
+Answer:
+
+Dependency Injection, or DI, is a design pattern used to provide an object with the dependencies it needs instead of allowing the object to create those dependencies itself.
+
+Suppose we have:
+
+public interface IEmployeeService
+{
+    void AddEmployee();
+}
+
+Implementation:
+
+public class EmployeeService : IEmployeeService
+{
+    public void AddEmployee()
+    {
+        Console.WriteLine("Employee added");
+    }
+}
+
+Instead of doing this:
+
+public class EmployeeController : Controller
+{
+    private EmployeeService service = new EmployeeService();
+}
+
+we inject the dependency:
+
+public class EmployeeController : Controller
+{
+    private readonly IEmployeeService _service;
+
+    public EmployeeController(IEmployeeService service)
+    {
+        _service = service;
+    }
+}
+
+Then register it in Program.cs:
+
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+Now ASP.NET Core's DI container automatically creates EmployeeService and passes it to the controller.
+
+Why do we use DI?
+
+It provides:
+
+Loose coupling
+Better maintainability
+Better testability
+Easier replacement of implementations
+Centralized dependency management
+
+For example, during unit testing we can replace:
+
+IEmployeeService
+       ↓
+EmployeeService
+
+with:
+
+IEmployeeService
+       ↓
+MockEmployeeService
+
+Interview answer:
+"Dependency Injection allows us to inject dependencies into a class rather than creating them manually, which promotes loose coupling and makes applications easier to test and maintain."
+
+3. Explain the different DI lifetimes in .NET Core.
+
+Answer:
+
+ASP.NET Core provides three major service lifetimes:
+
+1. Transient
+builder.Services.AddTransient<IEmailService, EmailService>();
+
+A new instance is created every time the service is requested.
+
+Example:
+
+Request
+ ├── Service A → Instance 1
+ ├── Service B → Instance 2
+ └── Service C → Instance 3
+
+Useful for lightweight stateless services.
+
+2. Scoped
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+One instance is created per HTTP request.
+
+For example:
+
+Request 1 → EmployeeService Instance 1
+Request 2 → EmployeeService Instance 2
+Request 3 → EmployeeService Instance 3
+
+This is commonly used with:
+
+DbContext
+
+because we generally want one DbContext per request.
+
+3. Singleton
+builder.Services.AddSingleton<IConfigurationService, ConfigurationService>();
+
+Only one instance is created for the application's lifetime.
+
+Application
+     ↓
+One Service Instance
+     ↓
+All Requests
+
+Useful for shared, thread-safe services such as certain caching or configuration services.
+
+Important interview point
+
+You should be careful about injecting a Scoped service into a Singleton, because the scoped service has a shorter lifetime.
+
+A common rule is:
+
+Transient → shortest
+Scoped    → request lifetime
+Singleton → application lifetime
+4. What is Middleware in ASP.NET Core?
+
+Answer:
+
+Middleware is a component that participates in the HTTP request-response pipeline.
+
+A request passes through multiple middleware components before reaching the endpoint.
+
+For example:
+
+Browser
+   ↓
+Exception Middleware
+   ↓
+HTTPS Middleware
+   ↓
+Static Files
+   ↓
+Routing
+   ↓
+Authentication
+   ↓
+Authorization
+   ↓
+Controller
+   ↓
+Response
+
+Example:
+
+app.UseAuthentication();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+We can also create custom middleware:
+
+public class LoggingMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    public LoggingMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        Console.WriteLine("Request received");
+
+        await _next(context);
+
+        Console.WriteLine("Response generated");
+    }
+}
+
+Register it:
+
+app.UseMiddleware<LoggingMiddleware>();
+
+The important concept is:
+
+await _next(context);
+
+This passes control to the next middleware.
+
+If you don't call _next, the pipeline can stop there.
+
+5. Explain the ASP.NET Core MVC request lifecycle.
+
+Answer:
+
+This is a very important interview question.
+
+Suppose the user requests:
+
+/Employee/Details/10
+
+The lifecycle is approximately:
+
+HTTP Request
+      ↓
+Kestrel/Web Server
+      ↓
+Middleware Pipeline
+      ↓
+Routing
+      ↓
+Controller Selection
+      ↓
+Controller Creation
+      ↓
+Model Binding
+      ↓
+Action Filters
+      ↓
+Controller Action
+      ↓
+Business/Service Layer
+      ↓
+Database
+      ↓
+Action Result
+      ↓
+View Rendering
+      ↓
+HTTP Response
+
+For example:
+
+public class EmployeeController : Controller
+{
+    public IActionResult Details(int id)
+    {
+        var employee = _service.GetEmployee(id);
+
+        return View(employee);
+    }
+}
+
+When:
+
+/Employee/Details/10
+
+is requested, routing determines:
+
+Controller = Employee
+Action     = Details
+id         = 10
+
+Then the framework creates the controller through DI.
+
+The id parameter is populated through model binding.
+
+The action executes:
+
+Details(10)
+
+The service gets the employee from the database.
+
+Finally:
+
+return View(employee);
+
+causes Razor to generate HTML.
+
+The generated HTML is returned to the browser.
+
+6. What is ASP.NET Core Web API?
+
+Answer:
+
+ASP.NET Core Web API is used to build HTTP-based services that allow different applications to communicate with each other.
+
+For example:
+
+React
+Angular
+Mobile App
+Another Backend
+       ↓
+ASP.NET Core Web API
+       ↓
+Database
+
+A controller can look like:
+
+[ApiController]
+[Route("api/[controller]")]
+public class EmployeeController : ControllerBase
+{
+    [HttpGet]
+    public IActionResult GetEmployees()
+    {
+        var employees = _service.GetEmployees();
+
+        return Ok(employees);
+    }
+}
+
+Calling:
+
+GET /api/Employee
+
+might return:
+
+[
+    {
+        "id": 1,
+        "name": "Rahul"
+    },
+    {
+        "id": 2,
+        "name": "Amit"
+    }
+]
+
+Common HTTP methods are:
+
+GET     → Retrieve
+POST    → Create
+PUT     → Update entire resource
+PATCH   → Partial update
+DELETE  → Delete
+
+Web APIs normally return:
+
+JSON
+
+rather than Razor HTML views.
+
+7. What is the difference between Controller and ControllerBase?
+
+Answer:
+
+In ASP.NET Core:
+
+Controller
+
+is generally used for MVC applications where we need Razor Views.
+
+Example:
+
+public class EmployeeController : Controller
+{
+    public IActionResult Index()
+    {
+        return View();
+    }
+}
+
+Controller provides functionality such as:
+
+View()
+ViewBag
+ViewData
+TempData
+
+For Web APIs, we generally use:
+
+ControllerBase
+
+Example:
+
+[ApiController]
+[Route("api/[controller]")]
+public class EmployeeController : ControllerBase
+{
+    [HttpGet]
+    public IActionResult Get()
+    {
+        return Ok();
+    }
+}
+
+ControllerBase provides API-related functionality such as:
+
+Ok()
+BadRequest()
+NotFound()
+Created()
+Unauthorized()
+Simple interview answer
+MVC application → Controller
+Web API          → ControllerBase
+
+Although Controller itself derives from ControllerBase.
+
+8. What is Routing in ASP.NET Core?
+
+Answer:
+
+Routing determines which controller/action or endpoint should handle an incoming HTTP request.
+
+There are two common approaches:
+
+Conventional Routing
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+So:
+
+/Employee/Details/10
+
+maps to:
+
+EmployeeController
+        ↓
+Details()
+        ↓
+id = 10
+Attribute Routing
+
+We can define routes directly on controllers:
+
+[ApiController]
+[Route("api/employees")]
+public class EmployeeController : ControllerBase
+{
+    [HttpGet("{id}")]
+    public IActionResult GetEmployee(int id)
+    {
+        return Ok();
+    }
+}
+
+Now:
+
+GET /api/employees/10
+
+calls:
+
+GetEmployee(10)
+
+Attribute routing is very common in Web APIs.
+
+9. What is Model Binding in ASP.NET Core?
+
+Answer:
+
+Model binding automatically converts incoming HTTP data into .NET objects or parameters.
+
+Suppose the request is:
+
+/Employee/Details/10
+
+Controller:
+
+public IActionResult Details(int id)
+{
+    return View();
+}
+
+ASP.NET Core automatically converts:
+
+"10"
+
+into:
+
+int id = 10;
+
+Another example:
+
+[HttpPost]
+public IActionResult Create(Employee employee)
+{
+    // employee is populated automatically
+}
+
+If the request contains:
+
+{
+    "name": "Rahul",
+    "salary": 50000
+}
+
+ASP.NET Core creates:
+
+Employee employee
+
+and populates its properties.
+
+This process is called model binding.
+
+10. What is Model Validation?
+
+Answer:
+
+Model validation verifies whether incoming data satisfies the rules defined for the model.
+
+Example:
+
+public class Employee
+{
+    [Required]
+    public string Name { get; set; }
+
+    [Range(18, 60)]
+    public int Age { get; set; }
+
+    [EmailAddress]
+    public string Email { get; set; }
+}
+
+If the user sends:
+
+Name = empty
+Age = 10
+Email = invalid
+
+validation will fail.
+
+In MVC:
+
+if (!ModelState.IsValid)
+{
+    return View(employee);
+}
+
+In Web API, when using:
+
+[ApiController]
+
+ASP.NET Core automatically performs model validation and can return:
+
+400 Bad Request
+
+with validation errors.
+
+11. What is Entity Framework Core?
+
+Answer:
+
+Entity Framework Core, or EF Core, is an Object-Relational Mapper (ORM).
+
+It allows us to work with a database using C# objects instead of writing SQL for every operation.
+
+Suppose we have:
+
+public class Employee
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; }
+
+    public decimal Salary { get; set; }
+}
+
+And:
+
+public class AppDbContext : DbContext
+{
+    public DbSet<Employee> Employees { get; set; }
+}
+
+We can retrieve employees:
+
+var employees = await _context.Employees.ToListAsync();
+
+Instead of manually writing:
+
+SELECT * FROM Employees;
+
+EF Core generates the SQL.
+
+For insertion:
+
+_context.Employees.Add(employee);
+
+await _context.SaveChangesAsync();
+
+For deletion:
+
+_context.Employees.Remove(employee);
+
+await _context.SaveChangesAsync();
+
+This makes database programming much easier and supports LINQ.
+
+12. What is DbContext and why is it registered as Scoped?
+
+Answer:
+
+DbContext represents a session with the database.
+
+It is responsible for:
+
+Database connection management
+Tracking entities
+Querying
+Saving changes
+Managing relationships
+Translating LINQ into SQL
+
+Example:
+
+public class AppDbContext : DbContext
+{
+    public DbSet<Employee> Employees { get; set; }
+}
+
+Registration:
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+AddDbContext() registers the context as Scoped by default.
+
+That means one DbContext instance is normally used during one HTTP request.
+
+For example:
+
+Request 1
+   ↓
+DbContext 1
+
+Request 2
+   ↓
+DbContext 2
+
+This is useful because DbContext is designed to represent a short-lived unit of work and isn't generally intended to be shared across concurrent requests.
+
+13. What are Migrations in EF Core?
+
+Answer:
+
+Migrations allow us to keep the database schema synchronized with our C# entity models.
+
+Suppose we initially have:
+
+public class Employee
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+}
+
+Then we add:
+
+public decimal Salary { get; set; }
+
+We can create a migration:
+
+Add-Migration AddSalaryToEmployee
+
+Then apply it:
+
+Update-Database
+
+In CLI:
+
+dotnet ef migrations add AddSalaryToEmployee
+dotnet ef database update
+
+The migration contains instructions describing the schema change.
+
+Conceptually:
+
+C# Model
+   ↓
+Migration
+   ↓
+Database Schema
+
+If later we add another property:
+
+Department
+
+we create another migration.
+
+Migrations are useful for version-controlling database schema changes along with application code.
+
+14. What is the difference between Authentication and Authorization?
+
+Answer:
+
+This is one of the most common interview questions.
+
+Authentication
+
+Authentication answers:
+
+Who are you?
+
+For example:
+
+Username + Password
+       ↓
+Login
+       ↓
+Identity verified
+Authorization
+
+Authorization answers:
+
+What are you allowed to do?
+
+For example:
+
+Admin
+ ↓
+Create Employee
+Delete Employee
+Update Employee
+
+Normal User
+ ↓
+View Employee
+
+Example:
+
+[Authorize]
+public IActionResult Dashboard()
+{
+    return View();
+}
+
+Role-based authorization:
+
+[Authorize(Roles = "Admin")]
+public IActionResult DeleteEmployee(int id)
+{
+    // Only Admin
+}
+
+So:
+
+Authentication → Identity
+Authorization  → Permission
+15. What are Filters in ASP.NET Core MVC?
+
+Answer:
+
+Filters allow us to execute logic at specific stages of MVC request processing.
+
+Common filter types include:
+
+Authorization Filter
+Resource Filter
+Action Filter
+Exception Filter
+Result Filter
+
+For example, an action filter can execute code before and after an action.
+
+public class LoggingFilter : IActionFilter
+{
+    public void OnActionExecuting(ActionExecutingContext context)
+    {
+        Console.WriteLine("Before action");
+    }
+
+    public void OnActionExecuted(ActionExecutedContext context)
+    {
+        Console.WriteLine("After action");
+    }
+}
+
+We can apply it:
+
+[ServiceFilter(typeof(LoggingFilter))]
+public IActionResult Index()
+{
+    return View();
+}
+
+Filters are useful for cross-cutting concerns such as:
+
+Logging
+Validation
+Authorization
+Exception handling
+Auditing
+Middleware vs Filters
+
+A useful interview distinction:
+
+Middleware → Entire HTTP pipeline
+Filter     → MVC/controller/action pipeline
+16. What is async/await in ASP.NET Core and why is it important?
+
+Answer:
+
+async and await are used for asynchronous programming.
+
+This is especially important for I/O operations such as:
+
+Database calls
+HTTP calls
+File operations
+External API calls
+
+Example:
+
+public async Task<IActionResult> GetEmployees()
+{
+    var employees = await _context.Employees.ToListAsync();
+
+    return Ok(employees);
+}
+
+Instead of blocking a thread while the database is processing the request, asynchronous programming allows the application to use resources more efficiently.
+
+Bad approach:
+
+var employees = _context.Employees.ToList();
+
+Preferred for I/O:
+
+var employees = await _context.Employees.ToListAsync();
+Important interview point
+
+async/await does not automatically make database execution faster.
+
+Its main benefit in web applications is improving scalability by avoiding unnecessary thread blocking during asynchronous I/O operations.
+
+17. What is Configuration in ASP.NET Core?
+
+Answer:
+
+ASP.NET Core provides a configuration system that allows applications to read settings from different sources.
+
+Common sources include:
+
+appsettings.json
+appsettings.Development.json
+Environment Variables
+Command-line arguments
+User Secrets
+External configuration providers
+
+Example:
+
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.;Database=EmployeeDB;Trusted_Connection=True;"
+  }
+}
+
+We can access it through:
+
+var connectionString =
+    builder.Configuration.GetConnectionString("DefaultConnection");
+
+Or inject IConfiguration:
+
+public class EmployeeService
+{
+    private readonly IConfiguration _configuration;
+
+    public EmployeeService(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+}
+
+For strongly typed settings, we can use the Options pattern:
+
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
+
+This is better than hardcoding values directly inside application code.
+
+18. Explain the difference between IEnumerable, IQueryable, and List.
+
+Answer:
+
+This is particularly important when working with EF Core.
+
+IEnumerable
+
+Generally represents an in-memory sequence and operations are typically performed against objects already loaded into memory.
+
+Example:
+
+IEnumerable<Employee> employees =
+    _context.Employees.ToList();
+
+The database query has already executed because of ToList().
+
+IQueryable
+
+Represents a query that can be translated by a provider such as EF Core into SQL.
+
+IQueryable<Employee> employees =
+    _context.Employees;
+
+var result = employees
+    .Where(x => x.Salary > 50000)
+    .ToList();
+
+The filtering can be translated into SQL and executed by the database.
+
+Conceptually:
+
+IQueryable
+   ↓
+LINQ expression
+   ↓
+SQL
+   ↓
+Database
+List
+
+List<T> is an in-memory collection.
+
+List<Employee> employees =
+    await _context.Employees.ToListAsync();
+
+At this point, the records are loaded into application memory.
+
+Interview summary
+IQueryable → Query can be translated/executed by provider
+IEnumerable → Sequence you can enumerate
+List       → Concrete in-memory collection
+19. What is the Repository Pattern and why is it used?
+
+Answer:
+
+The Repository Pattern creates an abstraction between application/business logic and the data-access mechanism.
+
+Instead of directly writing database code inside the controller:
+
+public IActionResult GetEmployees()
+{
+    var employees = _context.Employees.ToList();
+
+    return View(employees);
+}
+
+we can use:
+
+Controller
+    ↓
+Service
+    ↓
+Repository
+    ↓
+DbContext
+    ↓
+Database
+
+Interface:
+
+public interface IEmployeeRepository
+{
+    Task<List<Employee>> GetAllAsync();
+
+    Task<Employee> GetByIdAsync(int id);
+
+    Task AddAsync(Employee employee);
+}
+
+Implementation:
+
+public class EmployeeRepository : IEmployeeRepository
+{
+    private readonly AppDbContext _context;
+
+    public EmployeeRepository(AppDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<List<Employee>> GetAllAsync()
+    {
+        return await _context.Employees.ToListAsync();
+    }
+}
+
+Register it:
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+Then controller:
+
+public class EmployeeController : Controller
+{
+    private readonly IEmployeeRepository _repository;
+
+    public EmployeeController(IEmployeeRepository repository)
+    {
+        _repository = repository;
+    }
+}
+
+This gives us loose coupling and makes testing easier.
+
+Important interview nuance: EF Core's DbSet and DbContext already provide repository/unit-of-work-like behavior, so adding a repository layer is a design choice, not an absolute requirement.
+
+20. Explain the complete architecture of a real ASP.NET Core application.
+
+Answer:
+
+A real-world ASP.NET Core application is often divided into multiple layers.
+
+For example:
+
+                Client
+                  ↓
+             Controller/API
+                  ↓
+              Service
+                  ↓
+             Repository
+                  ↓
+              DbContext
+                  ↓
+              Database
+
+Let's take an Employee application.
+
+Controller
+
+Responsible for handling HTTP requests:
+
+[HttpGet]
+public async Task<IActionResult> GetEmployee(int id)
+{
+    var employee = await _service.GetEmployee(id);
+
+    if (employee == null)
+        return NotFound();
+
+    return Ok(employee);
+}
+Service
+
+Contains business logic:
+
+public async Task<Employee> GetEmployee(int id)
+{
+    return await _repository.GetByIdAsync(id);
+}
+Repository
+
+Handles data access:
+
+public async Task<Employee> GetByIdAsync(int id)
+{
+    return await _context.Employees
+        .FirstOrDefaultAsync(x => x.Id == id);
+}
+DbContext
+
+Communicates with the database:
+
+public class AppDbContext : DbContext
+{
+    public DbSet<Employee> Employees { get; set; }
+}
+DI
+
+Connects all these layers:
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+So the complete flow becomes:
+
+HTTP Request
+      ↓
+Middleware
+      ↓
+Routing
+      ↓
+Controller
+      ↓
+Service
+      ↓
+Repository
+      ↓
+DbContext
+      ↓
+SQL Server
+      ↓
+DbContext
+      ↓
+Repository
+      ↓
+Service
+      ↓
+Controller
+      ↓
+HTTP Response
+
+For an MVC application, the final step might instead be:
+
+Controller
+    ↓
+View Model
+    ↓
+Razor View
+    ↓
+HTML
+    ↓
+Browser
+
+For a Web API:
+
+Controller
+    ↓
+Object
+    ↓
+JSON Serialization
+    ↓
+HTTP Response
+🔥 The 20 questions you should especially prepare for your interview
+
+If the interviewer says "Explain .NET Core architecture", connect these topics together:
+
+ASP.NET Core
+     ↓
+Program.cs
+     ↓
+Dependency Injection
+     ↓
+Middleware
+     ↓
+Routing
+     ↓
+Controller
+     ↓
+Model Binding
+     ↓
+Validation
+     ↓
+Service Layer
+     ↓
+Repository
+     ↓
+EF Core / DbContext
+     ↓
+SQL Server
+     ↓
+Response
+
+And remember these one-line interview answers:
+
+Topic	Quick answer
+DI	Inject dependencies instead of creating them manually
+Transient	New instance every time requested
+Scoped	One instance per HTTP request
+Singleton	One instance for application lifetime
+Middleware	Components forming the HTTP pipeline
+MVC	Model + View + Controller
+Web API	HTTP-based service/API
+Controller	Handles MVC requests and can return views
+ControllerBase	Base class commonly used for APIs
+Routing	Maps URL/request to endpoint
+Model Binding	Converts request data into .NET objects
+Validation	Checks whether model data is valid
+EF Core	ORM for database access
+DbContext	Represents a unit of work/session with database
+Migration	Tracks database schema changes
+Authentication	Who are you?
+Authorization	What can you access?
+Filter	Runs at specific MVC pipeline stages
+async/await	Enables asynchronous I/O operations
+Repository	Abstraction around data access
