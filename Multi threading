@@ -1,0 +1,152 @@
+⚡ Summary of Multithreading in C#
+Thread → Smallest unit of execution. Managed by CLR.
+
+Task → Higher-level abstraction over threads, integrates with TPL (Task Parallel Library).
+
+Thread.Sleep() → Blocks current thread for given time.
+
+Monitor.Wait() / Pulse() → Used for synchronization, releases lock temporarily.
+
+Deadlock → Two or more threads waiting on each other’s resources → stuck forever.
+
+Async/Await → Simplifies asynchronous programming, avoids blocking UI.
+
+ThreadPool → Manages worker threads efficiently.
+
+Parallel Class → Executes loops in parallel.
+
+CancellationToken → Gracefully stops tasks.
+
+🔎 Long Interview Q&A with Examples
+Q1: What is the difference between Thread and Task in C#?
+Answer:
+
+Thread: Low-level, manually managed.
+
+Task: High-level abstraction, integrates with async/await, easier error handling.
+
+Example:
+
+csharp
+// Thread
+Thread t = new Thread(() => Console.WriteLine("Thread running"));
+t.Start();
+
+// Task
+Task.Run(() => Console.WriteLine("Task running"));
+👉 Interview Tip: Emphasize Task = modern approach.
+
+Q2: Explain Deadlock with an example.
+Answer:  
+Deadlock occurs when two threads wait on each other’s locks → neither proceeds.
+
+Example:
+
+csharp
+object lockA = new object();
+object lockB = new object();
+
+Thread t1 = new Thread(() => {
+    lock(lockA) {
+        Thread.Sleep(100);
+        lock(lockB) { Console.WriteLine("T1 acquired both"); }
+    }
+});
+
+Thread t2 = new Thread(() => {
+    lock(lockB) {
+        Thread.Sleep(100);
+        lock(lockA) { Console.WriteLine("T2 acquired both"); }
+    }
+});
+
+t1.Start();
+t2.Start();
+👉 Diagram:
+
+Code
+T1 → lockA → waiting for lockB
+T2 → lockB → waiting for lockA
+Q3: Difference between Sleep() and Wait()?
+Answer:
+
+Sleep(ms): Suspends thread for given time, does NOT release lock.
+
+Wait(): Releases lock temporarily, waits until Pulse/Notify.
+
+Example:
+
+csharp
+lock(obj) {
+    Monitor.Wait(obj); // releases lock
+    // resumes when Pulse is called
+}
+Q4: Explain ThreadPool vs Task.Run().
+Answer:
+
+ThreadPool: Reuses worker threads, efficient for short tasks.
+
+Task.Run(): Uses ThreadPool internally but adds async/await support.
+
+Q5: What is async/await in C#?
+Answer:  
+Async/await allows writing asynchronous code in synchronous style.
+
+Example:
+
+csharp
+async Task<int> GetDataAsync() {
+    await Task.Delay(2000); // non-blocking
+    return 42;
+}
+👉 Interview Tip: Stress non-blocking UI.
+
+Q6: How do you prevent Deadlocks?
+Answer:
+
+Acquire locks in consistent order.
+
+Use Monitor.TryEnter() with timeout.
+
+Prefer async/await over manual locks.
+
+Q7: Explain Task.Wait() vs await Task.
+Answer:
+
+Task.Wait() → Blocks current thread until task completes.
+
+await Task → Non-blocking, resumes when task completes.
+
+Q8: What is CancellationToken?
+Answer:  
+Used to stop tasks gracefully.
+
+Example:
+
+csharp
+CancellationTokenSource cts = new CancellationTokenSource();
+Task.Run(() => {
+    while(!cts.Token.IsCancellationRequested) {
+        Console.WriteLine("Running...");
+    }
+}, cts.Token);
+
+cts.Cancel(); // stop task
+Q9: Explain Parallel.ForEach.
+Answer:  
+Executes iterations in parallel using multiple threads.
+
+csharp
+Parallel.ForEach(new[] {1,2,3,4}, i => {
+    Console.WriteLine($"Processing {i}");
+});
+Q10: What is the difference between lock and Monitor?
+Answer:
+
+lock → syntactic sugar for Monitor.Enter/Exit.
+
+Monitor → provides advanced features like Wait() and Pulse().
+
+🧩 Visual Structure (Thread Lifecycle)
+Code
+Thread Created → Start() → Running → Waiting/Sleeping → Stopped
